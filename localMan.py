@@ -35,7 +35,7 @@ def scrape():
                 raise
     # SQL statements are executed using the Cursor execute() function.
     query = """select a.TransId, a.TrackingNum, s.[cf_External Trans Id] from tblSoShippingImport a join trav_tblSoTransHeader_view s on s.TransId = a.TransId"""
-    qq = orders.find()
+    qq = orders.find({'isTracked': False})
     cursor.execute(query)
     # Assigns all remaining rows to a list
     rows = cursor.fetchall()
@@ -51,9 +51,9 @@ def scrape():
     #orderMansPants['increment_id'] = orderMansPants['increment_id'].astype('int', errors='ignore')
     localMansPants2 = localMansPants.apply(lambda x: x.astype('object'))
     orderMansPants2 = orderMansPants.apply(lambda x: x.astype('object'))
-    megaZord = pd.concat([orderMansPants2, localMansPants2], ignore_index=True, axis=1, join='inner')
+    #megaZord = pd.concat([orderMansPants2, localMansPants2], ignore_index=True, axis=0, join='inner')
     #print(localMansPants.astype({'increment_id': 'int'}, errors='ignore').dtypes)
-    #megaZord = pd.merge(left=orderMansPants, right=localMansPants, how='inner', on='increment_id')
+    megaZord = pd.merge(left=orderMansPants2, right=localMansPants2, how='left', on='increment_id')
     print(megaZord)
     #print(localMansPants.dtypes)
     print(orderMansPants2.astype({'increment_id': 'int'}, errors='ignore').dtypes)
