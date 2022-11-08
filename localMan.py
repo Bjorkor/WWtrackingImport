@@ -50,3 +50,4 @@ def scrape():
 
     megaZord = pd.merge(left=orderMansPants, right=localMansPants, on='traverse_id')
     print(megaZord)
+scrape()
