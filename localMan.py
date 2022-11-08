@@ -46,12 +46,12 @@ def scrape():
     # Close the connection
     cnxn.close()
 
-    localMansPants.rename(columns={"TransId": "traverse_id", "TrackingNum": "tracking"}, inplace=True)
-    localMansPants = localMansPants.astype({'traverse_id': 'int'}, errors='ignore')
-    orderMansPants = orderMansPants.astype({'traverse_id': 'int'}, errors='ignore')
+    localMansPants.rename(columns={"TransId": "traverse_id", "TrackingNum": "tracking", "cf_External Trans Id": "increment_id"}, inplace=True)
+    localMansPants = localMansPants.astype({'increment_id': 'int'}, errors='ignore')
+    orderMansPants = orderMansPants.astype({'increment_id': 'int'}, errors='ignore')
     #megaZord = pd.concat([orderMansPants, localMansPants], ignore_index=True, axis=0, join='inner')
-    megaZord = pd.merge(left=orderMansPants, right=localMansPants, how='inner', on='traverse_id')
+    megaZord = pd.merge(left=orderMansPants, right=localMansPants, how='inner', on='increment_id')
     print(megaZord)
-    print(localMansPants)
-    print(orderMansPants)
+    #print(localMansPants)
+    #print(orderMansPants)
 scrape()
