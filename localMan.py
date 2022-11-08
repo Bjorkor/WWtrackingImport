@@ -53,7 +53,7 @@ def scrape():
     localMansPants['tracking'] = localMansPants['tracking'].convert_dtypes().astype('str', errors='ignore').convert_dtypes()
     localMansPants['traverse_id'] = localMansPants['traverse_id'].convert_dtypes().astype('str', errors='ignore').convert_dtypes()
     orderMansPants['increment_id'] = orderMansPants['increment_id'].convert_dtypes().astype('int', errors='ignore').convert_dtypes()
-    localMansPants = localMansPants[localMansPants['increment_id'].dtypes == int]
+    localMansPants = localMansPants[localMansPants['increment_id'].apply(lambda x: isinstance(x, int))]
     #localMansPants2 = localMansPants.apply(lambda x: x.astype('object'))
     #orderMansPants2 = orderMansPants.apply(lambda x: x.astype('object'))
     #localMansPants = localMansPants.infer_objects()#localMansPants.astype({'increment_id': int}, errors='ignore')
