@@ -48,6 +48,6 @@ def scrape():
 
     localMansPants.rename(columns={"TransId": "traverse_id", "TrackingNum": "tracking"}, inplace=True)
     localMansPants = localMansPants.astype({'traverse_id': 'float64'})
-    megaZord = pd.concat([orderMansPants, localMansPants], ignore_index=True, axis=1)
+    megaZord = pd.concat([orderMansPants, localMansPants], ignore_index=True, axis=1, join='inner')
     print(megaZord)
 scrape()
