@@ -37,7 +37,7 @@ cursor.execute(query)
 # Assigns all remaining rows to a list
 rows = cursor.fetchall()
 print('pulling data...')
-df = pd.read_sql(qq)
+df = pd.read_sql(qq, orders)
 print('data pulled')
 # Close the connection
 cnxn.close()
