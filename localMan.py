@@ -62,6 +62,7 @@ def scrape():
     megaZord = pd.merge(left=orderMansPants, right=localMansPants, how='left', on='increment_id')
     print(megaZord)
     print(localMansPants.dtypes)
+    print(localMansPants)
     print(orderMansPants.dtypes)
     #print(orderMansPants2.astype({'increment_id': 'int'}, errors='ignore').dtypes)
 scrape()
