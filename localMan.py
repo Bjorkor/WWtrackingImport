@@ -47,7 +47,7 @@ def scrape():
     cnxn.close()
 
     localMansPants.rename(columns={"TransId": "traverse_id", "TrackingNum": "tracking"}, inplace=True)
-
+    localMansPants = localMansPants.astype({'traverse_id': 'float64'})
     megaZord = pd.merge(left=orderMansPants, right=localMansPants, on='traverse_id')
     print(megaZord)
 scrape()
