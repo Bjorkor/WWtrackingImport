@@ -51,6 +51,8 @@ def scrape():
     #orderMansPants['increment_id'] = orderMansPants['increment_id'].astype('int', errors='ignore')
     localMansPants2 = localMansPants.apply(lambda x: x.astype('object'))
     orderMansPants2 = orderMansPants.apply(lambda x: x.astype('object'))
+    localMansPants2['increment_id'] = localMansPants2['increment_id'].astype('int')
+    orderMansPants2['increment_id'] = orderMansPants2['increment_id'].astype('int', errors='ignore')
     #megaZord = pd.concat([orderMansPants2, localMansPants2], ignore_index=True, axis=0, join='inner')
     #print(localMansPants.astype({'increment_id': 'int'}, errors='ignore').dtypes)
     megaZord = pd.merge(left=orderMansPants2, right=localMansPants2, how='inner', on='increment_id')
