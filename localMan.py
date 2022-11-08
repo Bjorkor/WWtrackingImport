@@ -2,6 +2,7 @@ import pyodbc
 import pandas as pd
 import pymongo
 from dotenv import load_dotenv
+import os
 server = "WIN-PBL82ADEL98.HDLUSA.LAN,49816,49816"
 database = "HDL"
 driver_name = ''
