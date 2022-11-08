@@ -47,8 +47,8 @@ def scrape():
     cnxn.close()
 
     localMansPants.rename(columns={"TransId": "traverse_id", "TrackingNum": "tracking", "cf_External Trans Id": "increment_id"}, inplace=True)
-    localMansPants = localMansPants.astype({'increment_id': 'float'}, errors='ignore', copy=False)
-    orderMansPants = orderMansPants.astype({'increment_id': 'float'}, errors='ignore', copy=False)
+    localMansPants['increment_id'] = localMansPants['increment_id'].astype('float64', errors='ignore')
+    orderMansPants['increment_id'] = orderMansPants['increment_id'].astype('float64', errors='ignore')
     #megaZord = pd.concat([orderMansPants, localMansPants], ignore_index=True, axis=0, join='inner')
     #print(localMansPants.astype({'increment_id': 'int'}, errors='ignore').dtypes)
     megaZord = pd.merge(left=orderMansPants, right=localMansPants, how='inner', on='increment_id')
