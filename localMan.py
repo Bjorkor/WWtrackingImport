@@ -49,7 +49,7 @@ def scrape():
     localMansPants.rename(columns={"TransId": "traverse_id", "TrackingNum": "tracking", "cf_External Trans Id": "increment_id"}, inplace=True)
     localMansPants['increment_id'] = localMansPants['increment_id'].convert_dtypes().astype('int', errors='ignore').convert_dtypes()
     localMansPants['increment_id'] = localMansPants['increment_id'].convert_dtypes().astype('int', errors='ignore').convert_dtypes()
-    localMansPants[["increment_id"]] = localMansPants[["increment_id"]].apply(pd.to_numeric)
+    localMansPants[["increment_id"]] = localMansPants[["increment_id"]].apply(pd.to_numeric, errors='ignore')
     localMansPants['tracking'] = localMansPants['tracking'].convert_dtypes().astype('str', errors='ignore').convert_dtypes()
     localMansPants['traverse_id'] = localMansPants['traverse_id'].convert_dtypes().astype('str', errors='ignore').convert_dtypes()
     orderMansPants['increment_id'] = orderMansPants['increment_id'].convert_dtypes().astype('int', errors='ignore').convert_dtypes()
