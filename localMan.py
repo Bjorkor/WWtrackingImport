@@ -52,6 +52,6 @@ def scrape():
     #megaZord = pd.concat([orderMansPants, localMansPants], ignore_index=True, axis=0, join='inner')
     megaZord = pd.merge(left=orderMansPants, right=localMansPants, how='inner', on='increment_id')
     print(megaZord)
-    #print(localMansPants)
-    #print(orderMansPants)
+    print(localMansPants)
+    print(orderMansPants)
 scrape()
