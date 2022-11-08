@@ -63,6 +63,7 @@ def scrape():
     #print(megaZord)
     print(localMansPants.select_dtypes(include='float64'))
     print(localMansPants)
+    print(localMansPants.select_dtypes(include='float64').dtypes)
     print(orderMansPants.dtypes)
     #print(orderMansPants2.astype({'increment_id': 'int'}, errors='ignore').dtypes)
 scrape()
