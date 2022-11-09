@@ -23,10 +23,11 @@ def work(local, order):
     print(order)
 print('i am doing thingsssssss')
 nums = [999999, 999999, 999999, 300574]
+list = []
 for x in nums:
     print(x)
-    print(len(orders.find({'entity_id': x})))
     for y in orders.find({'entity_id': x}):
+        list.append(y)
         if order(y):
             print(y)
             print('pog')
