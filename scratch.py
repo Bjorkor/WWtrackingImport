@@ -22,7 +22,7 @@ def work(local, order):
     print(order)
 
 
-for x in orders.find():
+for x in orders.find({ "entity_id": 999999 }):
     print(x)
 
 
