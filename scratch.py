@@ -5,8 +5,8 @@ from dotenv import load_dotenv
 import os
 import datetime
 
-local = pd.read_csv('local.csv')
-order = pd.read_csv('order.csv')
+#local = pd.read_csv('local.csv')
+#order = pd.read_csv('order.csv')
 load_dotenv()
 dbaddr = os.getenv('DBADDR')
 client = pymongo.MongoClient(dbaddr)
