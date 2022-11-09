@@ -50,3 +50,4 @@ except:
     traceback.print_exc()
 
 
+localMan.scrape()
