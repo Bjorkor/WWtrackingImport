@@ -24,6 +24,7 @@ def work(local, order):
 nums = [999999, 999999, 999999, 300487]
 for x in nums:
     if orders.find({ "entity_id": x }):
+        print(x)
         print('we got em')
     else:
         print('none yet')
