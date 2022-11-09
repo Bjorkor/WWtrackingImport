@@ -29,37 +29,8 @@ thread_local = local()
 
 
 
-def pullOrders():
-    now = datetime.datetime.utcnow()
-    target = now - datetime.timedelta(hours=2)
-    # .strftime("%Y-%m-%d %H:%M:%S")
-    api_url = f'https://wwhardware.com/rest/default/V1/orders?searchCriteria[sortOrders][0][field]=created_at&searchCriteria[sortOrders][0][direction]=DESC&searchCriteria[filterGroups][0][filters][0][conditionType]=gteq&searchCriteria[filterGroups][0][filters][0][field]=created_at&searchCriteria[filterGroups][0][filters][0][value]={target.strftime("%Y-%m-%d %H:%M:%S")}'
 
-    load_dotenv()
-    token = os.getenv('BEARER')
-    headers = {'Authorization': f'Bearer {token}'}
-    session = get_session()
-    with session as session:
-        response = session.get(api_url, headers=headers)
-        #print(response.status_code)
-        #print(response.content)
-        if response.status_code == 200:
-            y = json.loads(response.content)
-            for x in y['items']:
-                entity = int(x['entity_id'])
-                increment = int(x['increment_id'])
-                order(entity_id=entity, increment_id=increment).new()
-                #time.sleep(5)
-        if response.status_code == 400:
-            print(response.content)
-        if response.status_code != 200 and response.status_code != 400:
-            # print('FFFFFF')
-            while response.status_code != 200 and response.status_code != 400:
-                print('retrying...')
-                time.sleep(10)
-                response = session.get(api_url, headers=headers)
-                print(response.status_code)
-    localMan.scrape()
+
 
 def morehands() -> None:
     with ThreadPoolExecutor(max_workers=100) as executor:

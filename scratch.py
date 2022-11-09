@@ -38,11 +38,41 @@ for increment_id in list:
         # print(response.content)
         if response.status_code == 200:
             y = json.loads(response.content)
-            #y = response.content
-            print(y['items'][0]['entity_id'])
-            #for x in y[0]:
-                #print(x)
-                # time.sleep(5)
+            entity_id = y['items'][0]['entity_id']
+            order(increment_id=increment_id).update('entity_id', entity_id)
+        if response.status_code == 400:
+            print(response.content)
+        if response.status_code != 200 and response.status_code != 400:
+            # print('FFFFFF')
+            while response.status_code != 200 and response.status_code != 400:
+                print('retrying...')
+                time.sleep(10)
+                response = session.get(api_url, headers=headers)
+                print(response.status_code)
+
+
+
+
+def pullOrder(increment_id):
+    now = datetime.datetime.utcnow()
+    target = now - datetime.timedelta(hours=2)
+    # .strftime("%Y-%m-%d %H:%M:%S")
+
+    load_dotenv()
+    token = os.getenv('BEARER')
+    headers = {'Authorization': f'Bearer {token}'}
+    session = get_session()
+    with session as session:
+        api_url = f'https://wwhardware.com/rest/default/V1/orders?searchCriteria[pageSize]=1&searchCriteria[filterGroups][0][filters][0][field]=increment_id&searchCriteria[filterGroups][0][filters][0][value]={increment_id}'
+
+        response = session.get(api_url, headers=headers)
+        # print(response.status_code)
+        # print(response.content)
+        if response.status_code == 200:
+            y = json.loads(response.content)
+            entity_id = y['items'][0]['entity_id']
+            if order().find({'entity_id': entity_id}):
+                order(increment_id=increment_id).update('entity_id', entity_id)
         if response.status_code == 400:
             print(response.content)
         if response.status_code != 200 and response.status_code != 400:

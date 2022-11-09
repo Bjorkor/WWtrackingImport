@@ -19,7 +19,7 @@ orders = db["orders"]
 
 
 class order:
-    def __init__(self, entity_id, increment_id=None, traverse_id=None, tracking=None):
+    def __init__(self, entity_id=None, increment_id=None, traverse_id=None, tracking=None):
         self.entity_id = entity_id
         self.increment_id = increment_id
         self.traverse_id = traverse_id
@@ -27,13 +27,13 @@ class order:
         #print(f'the object has entity_id: {self.entity_id}')
 
     def __str__(self):
-        gen = (str(x) for x in orders.find({"entity_id": self.entity_id}))
+        gen = (str(x) for x in orders.find({"increment_id": self.increment_id}))
         d = ', '.join(map(str, gen))
         return d
 
     def new(self):
         now = datetime.datetime.utcnow()
-        data = {'_id': self.entity_id, 'entity_id': self.entity_id, 'increment_id': self.increment_id,
+        data = {'_id': self.increment_id, 'entity_id': self.entity_id, 'increment_id': self.increment_id,
                 'traverse_id': self.traverse_id, 'tracking': self.tracking, 'dateCreated': now, 'dateModified': now,
                 'isTracked': False}
         try:
@@ -49,11 +49,11 @@ class order:
 
     def update(self, property, value):
         now = datetime.datetime.utcnow()
-        query = {'_id': self.entity_id}
+        query = {'_id': self.increment_id}
         update = {'$set': {property: value, 'dateModified': now}}
         try:
             orders.update_one(query, update)
-            print(f'Updated {property} to {value} on order {self.entity_id}')
+            print(f'Updated {property} to {value} on order {self.increment_id}')
         except:
             traceback.print_exc()
 
