@@ -25,6 +25,7 @@ print('i am doing thingsssssss')
 nums = [999999, 999999, 999999, 300574]
 for x in nums:
     print(x)
+    print(len(orders.find({'entity_id': x})))
     for y in orders.find({'entity_id': x}):
         if order(y):
             print(y)
