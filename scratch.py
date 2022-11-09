@@ -22,7 +22,7 @@ def work(local, order):
     print(order)
 
 nums = [999999, 999999, 999999, 300487]
-for x in len(nums):
+for x in nums:
     if orders.find({ "entity_id": x }):
         print('we got em')
     else:
