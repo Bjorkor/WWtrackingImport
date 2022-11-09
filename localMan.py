@@ -40,7 +40,7 @@ def scrape():
     # Assigns all remaining rows to a list
     rows = cursor.fetchall()
     print('pulling data...')
-    orderMansPants = pd.DataFrame(list(qq))
+    orderMansPants = pd.DataFrame(list(qq), index_col='_id')
     localMansPants = pd.read_sql(query, cnxn)
     print('data pulled')
     # Close the connection
@@ -49,4 +49,7 @@ def scrape():
     localMansPants.rename(columns={"TransId": "traverse_id", "TrackingNum": "tracking", "cf_External Trans Id": "increment_id"}, inplace=True)
     localMansPants.to_csv('local.csv')
     orderMansPants.to_csv('order.csv')
+    orderMansPants = orderMansPants[['entity_id', 'increment_id', 'dateCreated', 'dateModified', 'isTracked']]
+    megazord = pd.merge(left=orderMansPants, right=localMansPants, on='increment_id', how='left')
+    print(megazord)
 scrape()
