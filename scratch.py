@@ -21,9 +21,10 @@ def work(local, order):
     print('order')
     print(order.dtypes)
     print(order)
-
+print('i am doing thingsssssss')
 nums = [999999, 999999, 999999, 300487]
 for x in nums:
+    print(x)
     for y in orders.find({'entity_id': x}):
         print(order(y))
 
