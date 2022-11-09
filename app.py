@@ -15,7 +15,7 @@ import traceback
 global client
 global db
 global orders
-
+load_dotenv()
 dbaddr = os.getenv('DBADDR')
 client = pymongo.MongoClient(dbaddr)
 db = client["wwmongo"]
@@ -71,7 +71,7 @@ def get_session() -> Session:
         thread_local.session = requests.Session()
     return thread_local.session
 
-pullOrders()
+#pullOrders()
 try:
     for x in orders.find():
         print(order(x))
