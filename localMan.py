@@ -65,6 +65,7 @@ def scrape():
     localMansPants = localMansPants[localMansPants['increment_id'].apply(lambda x: len(x) == 10)]
     localMansPants = localMansPants[localMansPants['traverse_id'].apply(lambda x: str(x).startswith('2'))]
     localMansPants[["increment_id"]] = localMansPants[["increment_id"]].apply(pd.to_numeric, errors='ignore')
+    megaZord = pd.merge(left=orderMansPants, right=localMansPants, how='left', on='increment_id')
     #localMansPantsfloat = localMansPants.select_dtypes(include='float64')
     #localMansPantsint = localMansPants.select_dtypes(include='int64')
     #print(localMansPantsfloat.dtypes)
@@ -75,5 +76,6 @@ def scrape():
     localMansPants.to_csv('localpants.csv')
     print(localMansPants.dtypes)
     print(orderMansPants.dtypes)
+    print(megaZord)
     #print(orderMansPants2.astype({'increment_id': 'int'}, errors='ignore').dtypes)
 scrape()
