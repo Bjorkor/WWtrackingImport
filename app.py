@@ -42,7 +42,6 @@ def get_session() -> Session:
         thread_local.session = requests.Session()
     return thread_local.session
 
-pullOrders()
 try:
     for x in orders.find():
         print(order(x))
