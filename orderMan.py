@@ -37,9 +37,12 @@ class order:
                 'traverse_id': self.traverse_id, 'tracking': self.tracking, 'dateCreated': now, 'dateModified': now,
                 'isTracked': False}
         try:
-            query = orders.insert_one(data)
+            if orders.find_one({'entity_id': self.entity_id}):
+                pass
+            else:
+                query = orders.insert_one(data)
 
-            print(f'Pushed order {self.entity_id} to local database with ID {query.inserted_id}')
+                print(f'Pushed order {self.entity_id} to local database with ID {query.inserted_id}')
         except:
             traceback.print_exc()
 
