@@ -39,8 +39,9 @@ for increment_id in list:
         if response.status_code == 200:
             #y = json.loads(response.content)
             y = response.content
-            for x in y[0]:
-                print(x)
+            print(y)
+            #for x in y[0]:
+                #print(x)
                 # time.sleep(5)
         if response.status_code == 400:
             print(response.content)
