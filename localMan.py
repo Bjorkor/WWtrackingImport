@@ -64,7 +64,7 @@ def scrape():
     localMansPants = localMansPants[localMansPants['increment_id'].apply(lambda x: len(x) == 10)]
     localMansPants = localMansPants.astype({'increment_id': int})
 
-    for row, index in localMansPants.iterrows():
+    for index, row in localMansPants.iterrows():
         increment_id = row['increment_id']
         pullOrder(increment_id)
     qq = orders.find({'isTracked': False})
