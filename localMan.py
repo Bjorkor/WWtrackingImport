@@ -40,7 +40,7 @@ def scrape():
     # Assigns all remaining rows to a list
     rows = cursor.fetchall()
     print('pulling data...')
-    orderMansPants = pd.DataFrame(list(qq), index_col='_id')
+    orderMansPants = pd.DataFrame(list(qq))
     localMansPants = pd.read_sql(query, cnxn)
     print('data pulled')
     # Close the connection
