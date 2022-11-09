@@ -48,10 +48,7 @@ def pullOrders():
             for x in y['items']:
                 entity = int(x['entity_id'])
                 increment = int(x['increment_id'])
-                try:
-                    order(entity_id=entity, increment_id=increment).new()
-                except:
-
+                order(entity_id=entity, increment_id=increment).new()
                 #time.sleep(5)
         if response.status_code == 400:
             print(response.content)
