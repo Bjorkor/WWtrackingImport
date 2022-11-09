@@ -51,7 +51,6 @@ def scrape():
     orderMansPants = orderMansPants[['entity_id', 'increment_id', 'dateCreated', 'dateModified', 'isTracked']]
     localMansPants = localMansPants.dropna()
     localMansPants = localMansPants[localMansPants['increment_id'].apply(lambda x: len(x) == 10)]
-    orderMansPants = orderMansPants[orderMansPants['increment_id'].apply(lambda x: len(x) == 10)]
     localMansPants = localMansPants.astype({'increment_id': int})
     orderMansPants = orderMansPants.astype({'increment_id': int})
     megazord = pd.merge(left=orderMansPants, right=localMansPants, on='increment_id', how='left')
