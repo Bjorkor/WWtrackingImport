@@ -31,7 +31,7 @@ thread_local = local()
 
 def pullOrders():
     now = datetime.datetime.utcnow()
-    target = now - datetime.timedelta(hours=3)
+    target = now - datetime.timedelta(hours=2)
     # .strftime("%Y-%m-%d %H:%M:%S")
     api_url = f'https://wwhardware.com/rest/default/V1/orders?searchCriteria[sortOrders][0][field]=created_at&searchCriteria[sortOrders][0][direction]=DESC&searchCriteria[filterGroups][0][filters][0][conditionType]=gteq&searchCriteria[filterGroups][0][filters][0][field]=created_at&searchCriteria[filterGroups][0][filters][0][value]={target.strftime("%Y-%m-%d %H:%M:%S")}'
 
