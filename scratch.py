@@ -26,5 +26,9 @@ nums = [999999, 999999, 999999, 300574]
 for x in nums:
     print(x)
     for y in orders.find({'entity_id': x}):
-        print(order(y))
+        if order(y):
+            print(order(y))
+            print('pog')
+        else:
+            print('antipog')
 
