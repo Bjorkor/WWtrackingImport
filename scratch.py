@@ -25,14 +25,9 @@ print('i am doing thingsssssss')
 nums = [999999, 999999, 999999, 300574]
 list = []
 for x in nums:
-    print(x)
-    for y in orders.find({'entity_id': x}):
-        list.append(y)
-        if order(y):
-            print(y)
-            print('pog')
-        else:
-            print('antipog')
+    print(f'checking for {x}')
+    if orders.find_one({'entity_id': x}):
+        print('yes')
+    else:
+        print('noooo')
 
-print(len(list))
-print(list)
