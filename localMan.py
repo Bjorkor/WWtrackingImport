@@ -60,7 +60,6 @@ def scrape():
 
     localMansPants.rename(columns={"TransId": "traverse_id", "TrackingNum": "tracking", "cf_External Trans Id": "increment_id"}, inplace=True)
 
-    orderMansPants = orderMansPants[['entity_id', 'increment_id', 'dateCreated', 'dateModified', 'isTracked']]
     localMansPants = localMansPants.dropna()
     localMansPants = localMansPants[localMansPants['increment_id'].apply(lambda x: len(x) == 10)]
     localMansPants = localMansPants.astype({'increment_id': int})
@@ -70,6 +69,7 @@ def scrape():
         pullOrder(increment_id)
     qq = orders.find({'isTracked': False})
     orderMansPants = pd.DataFrame(list(qq))
+    orderMansPants = orderMansPants[['entity_id', 'increment_id', 'dateCreated', 'dateModified', 'isTracked']]
 
     megazord = pd.merge(left=orderMansPants, right=localMansPants, on='increment_id', how='left')
     megazord['isTracked'] = True
