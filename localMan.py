@@ -64,6 +64,7 @@ def scrape():
     localMansPants.dropna(inplace=True)
     localMansPants = localMansPants[localMansPants['increment_id'].apply(lambda x: len(x) == 10)]
     localMansPants = localMansPants[localMansPants['traverse_id'].apply(lambda x: str(x).startswith('2'))]
+    localMansPants[["increment_id"]] = localMansPants[["increment_id"]].apply(pd.to_numeric, errors='ignore')
     #localMansPantsfloat = localMansPants.select_dtypes(include='float64')
     #localMansPantsint = localMansPants.select_dtypes(include='int64')
     #print(localMansPantsfloat.dtypes)
