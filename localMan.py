@@ -60,7 +60,8 @@ def scrape():
         entity = row['entity_id']
         traverse_id = row['traverse_id']
         tracking = row['tracking']
-        order(entity_id=entity).update('traverse_id', int(traverse_id))
+
+        order(entity_id=entity).update('traverse_id', traverse_id)
         order(entity_id=entity).update('tracking', str(tracking))
 
 
