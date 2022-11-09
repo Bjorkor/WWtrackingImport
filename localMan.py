@@ -70,6 +70,7 @@ def scrape():
     #print(localMansPantsint.dtypes)
     #print(localMansPantsint)
     print(localMansPants)
+    localMansPants.to_csv('localpants.csv')
     print(localMansPants.dtypes)
     print(orderMansPants.dtypes)
     #print(orderMansPants2.astype({'increment_id': 'int'}, errors='ignore').dtypes)
