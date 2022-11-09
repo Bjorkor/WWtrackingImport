@@ -7,7 +7,11 @@ import datetime
 
 local = pd.read_csv('local.csv')
 order = pd.read_csv('order.csv')
-
+load_dotenv()
+dbaddr = os.getenv('DBADDR')
+client = pymongo.MongoClient(dbaddr)
+db = client["wwmongo"]
+orders = db["orders"]
 def work(local, order):
     local['tracking'] = local[local['tracking'].astype('string')]
     print('local')
@@ -18,6 +22,7 @@ def work(local, order):
     print(order)
 
 
-work(local, order)
+for x in orders.find():
+    print(x)
 
 
