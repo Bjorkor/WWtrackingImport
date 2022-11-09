@@ -24,7 +24,7 @@ class order:
         self.increment_id = increment_id
         self.traverse_id = traverse_id
         self.tracking = tracking
-        print(f'the object has entity_id: {self.entity_id}')
+        #print(f'the object has entity_id: {self.entity_id}')
 
     def __str__(self):
         gen = (str(x) for x in orders.find({"entity_id": self.entity_id}))
