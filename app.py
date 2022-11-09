@@ -8,6 +8,7 @@ import datetime
 from dotenv import load_dotenv
 import os
 from orderMan import order
+import localMan
 import json
 import pymongo
 import traceback
@@ -48,7 +49,7 @@ def pullOrders():
                 entity = int(x['entity_id'])
                 increment = int(x['increment_id'])
                 order(entity_id=entity, increment_id=increment).new()
-                time.sleep(5)
+                #time.sleep(5)
         if response.status_code == 400:
             print(response.content)
         if response.status_code != 200 and response.status_code != 400:
@@ -58,7 +59,7 @@ def pullOrders():
 
                 response = session.get(api_url, headers=headers)
                 print(response.status_code)
-
+    localMan.scrape()
 
 def morehands() -> None:
     with ThreadPoolExecutor(max_workers=100) as executor:
@@ -70,11 +71,10 @@ def get_session() -> Session:
         thread_local.session = requests.Session()
     return thread_local.session
 
-#pullOrders()
+pullOrders()
 try:
-    for x in orders.find({'isTracked': 0}):
-        order(x['_id']).update('isTracked', False)
-        print(order(x['_id']))
+    for x in orders.find():
+        print(order(x))
 
 except:
     traceback.print_exc()
