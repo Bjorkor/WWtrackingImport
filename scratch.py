@@ -27,7 +27,7 @@ load_dotenv()
 token = os.getenv('BEARER')
 headers = {'Authorization': f'Bearer {token}'}
 session = get_session()
-list = ['2000301013', '2000301012', '2000301011', '2000301010', '', '2000301009']
+list = ['2000301013', '2000301012', '2000301011', '2000301010', '2000301009']
 
 for increment_id in list:
     with session as session:
