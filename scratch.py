@@ -4,6 +4,7 @@ import pymongo
 from dotenv import load_dotenv
 import os
 import datetime
+from orderMan import order
 
 #local = pd.read_csv('local.csv')
 #order = pd.read_csv('order.csv')
@@ -24,5 +25,5 @@ def work(local, order):
 nums = [999999, 999999, 999999, 300487]
 for x in nums:
     for y in orders.find({'entity_id': x}):
-        print(y)
+        print(order(y))
 
