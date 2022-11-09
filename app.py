@@ -73,8 +73,7 @@ def get_session() -> Session:
 
 #pullOrders()
 try:
-    for x in orders.find():
-        print(order(x))
+    orders.drop()
 
 except:
     traceback.print_exc()

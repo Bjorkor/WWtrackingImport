@@ -3,7 +3,7 @@ import pandas as pd
 import pymongo
 from dotenv import load_dotenv
 import os
-
+import datetime
 
 def scrape():
     server = "WIN-PBL82ADEL98.HDLUSA.LAN,49816,49816"
@@ -55,5 +55,15 @@ def scrape():
     megazord = pd.merge(left=orderMansPants, right=localMansPants, on='increment_id', how='left')
     megazord['isTracked'] = True
     print('pushing tracking and traverse_id to database...')
+    for index, row in megazord.iterrows():
+        now = datetime.datetime.utcnow()
+        entity = row['entity_id']
+        increment_id = row['increment_id']
+        dateCreated = row['dateCreated']
+        isTracked = row['isTracked']
+        traverse_id = row['traverse_id']
+        tracking = row['tracking']
+        myquery = {"entity_id": entity}
+        newvalues = {"$set": {"traverse_id": traverse_id, 'tracking': tracking, 'dateModified': now }}
     orders.insert_many(megazord.to_dict('records'))
 
