@@ -47,9 +47,9 @@ def scrape():
     cnxn.close()
 
     localMansPants.rename(columns={"TransId": "traverse_id", "TrackingNum": "tracking", "cf_External Trans Id": "increment_id"}, inplace=True)
-    localMansPants.to_csv('local.csv')
-    orderMansPants.to_csv('order.csv')
+
     orderMansPants = orderMansPants[['entity_id', 'increment_id', 'dateCreated', 'dateModified', 'isTracked']]
+    localMansPants = localMansPants.dropna()
     localMansPants = localMansPants[localMansPants['increment_id'].apply(lambda x: len(x) == 10)]
     megazord = pd.merge(left=orderMansPants, right=localMansPants, on='increment_id', how='left')
     print(megazord)
