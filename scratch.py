@@ -21,8 +21,11 @@ def work(local, order):
     print(order.dtypes)
     print(order)
 
-
-for x in orders.find({ "entity_id": 999999 }):
-    print(x)
+nums = [999999, 999999, 999999, 300487]
+for x in len(nums):
+    if orders.find({ "entity_id": x }):
+        print('we got em')
+    else:
+        print('none yet')
 
 
