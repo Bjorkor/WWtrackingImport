@@ -56,7 +56,7 @@ def pullOrders():
             # print('FFFFFF')
             while response.status_code != 200 and response.status_code != 400:
                 print('retrying...')
-
+                time.sleep(10)
                 response = session.get(api_url, headers=headers)
                 print(response.status_code)
     localMan.scrape()
