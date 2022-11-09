@@ -63,7 +63,7 @@ def scrape():
     #print(megaZord)
     localMansPants.dropna(inplace=True)
     localMansPants = localMansPants[localMansPants['increment_id'].apply(lambda x: len(x) == 10)]
-    localMansPants = localMansPants[localMansPants['increment_id'].apply(lambda x: x.startswith('2'))]
+    localMansPants = localMansPants[localMansPants['traverse_id'].apply(lambda x: x.startswith('2'))]
     #localMansPantsfloat = localMansPants.select_dtypes(include='float64')
     #localMansPantsint = localMansPants.select_dtypes(include='int64')
     #print(localMansPantsfloat.dtypes)
