@@ -61,6 +61,7 @@ def scrape():
     #print(localMansPants.astype({'increment_id': 'int'}, errors='ignore').dtypes)
     #megaZord = pd.merge(left=orderMansPants, right=localMansPants, how='left', on='increment_id')
     #print(megaZord)
+    localMansPants.dropna(inplace=True)
     localMansPants = localMansPants[localMansPants['increment_id'].apply(lambda x: len(x) == 10)]
     localMansPantsfloat = localMansPants.select_dtypes(include='float64')
     localMansPantsint = localMansPants.select_dtypes(include='int64')
