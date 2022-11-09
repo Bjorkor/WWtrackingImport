@@ -34,3 +34,5 @@ for x in nums:
         else:
             print('antipog')
 
+print(len(list))
+print(list)
