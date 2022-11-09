@@ -27,7 +27,7 @@ for x in nums:
     print(x)
     for y in orders.find({'entity_id': x}):
         if order(y):
-            print(order(y))
+            print(y)
             print('pog')
         else:
             print('antipog')
