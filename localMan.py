@@ -55,5 +55,5 @@ def scrape():
     megazord = pd.merge(left=orderMansPants, right=localMansPants, on='increment_id', how='left')
     megazord['isTracked'] = True
     print('pushing tracking and traverse_id to database...')
-    orders.update_many(megazord.to_dict('records'))
+    orders.update_many(filter={}, update=megazord.to_dict('records'))
 
