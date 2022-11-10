@@ -62,4 +62,4 @@ for x in orders.find({'isTracked': False}):
         j['tracks'][0]['carrier_code'] = 'USPS'
     else:
         j['tracks'][0]['carrier_code'] = 'Other'
-    print(json.dump(j))
+    print(json.dumps(j))
