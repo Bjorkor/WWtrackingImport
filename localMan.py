@@ -83,7 +83,7 @@ def scrape():
         order(increment_id=increment_id).update('traverse_id', traverse_id)
         order(increment_id=increment_id).update('tracking', str(tracking))
 
-def pullOrder(increment_id):
+def pullOrder(increment_id, traverse_id):
     now = datetime.datetime.utcnow()
     target = now - datetime.timedelta(hours=2)
     # .strftime("%Y-%m-%d %H:%M:%S")
@@ -101,7 +101,7 @@ def pullOrder(increment_id):
         if response.status_code == 200:
             y = json.loads(response.content)
             entity_id = y['items'][0]['entity_id']
-            order(entity_id=entity_id, increment_id=increment_id).new()
+            order(entity_id=entity_id, increment_id=increment_id, traverse_id=traverse_id).new()
         if response.status_code == 400:
             print(response.content)
         if response.status_code != 200 and response.status_code != 400:
