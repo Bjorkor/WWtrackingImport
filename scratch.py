@@ -63,3 +63,4 @@ for x in orders.find({'isTracked': False}):
     else:
         j['tracks'][0]['carrier_code'] = 'Other'
     print(json.dumps(j))
+    print(url)
