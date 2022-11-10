@@ -66,7 +66,8 @@ def scrape():
 
     for index, row in localMansPants.iterrows():
         increment_id = row['increment_id']
-        pullOrder(increment_id)
+        traverse_id = row['traverse_id']
+        pullOrder(increment_id, traverse_id)
     qq = orders.find({'isTracked': False})
     orderMansPants = pd.DataFrame(list(qq))
     orderMansPants = orderMansPants[['entity_id', 'increment_id', 'dateCreated', 'dateModified', 'isTracked']]
