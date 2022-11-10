@@ -24,6 +24,17 @@ def get_session() -> Session:
     if not hasattr(thread_local, 'session'):
         thread_local.session = requests.Session()
     return thread_local.session
+json = '''{
+  "tracks": 
+    [
+      {
+        "track_number": ,
+        "title": ,
+        "carrier": 
+      }
+    ] 
+}'''
 
+json = json.loads(json)
 
-localMan.pushTracks()
+print(json['tracks'])
