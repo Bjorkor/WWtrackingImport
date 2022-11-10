@@ -12,6 +12,7 @@ import localMan
 import json
 import pymongo
 import traceback
+
 global client
 global db
 global orders
@@ -26,12 +27,7 @@ orders = db["orders"]
 # .strftime("%Y-%m-%d %H:%M:%S")
 
 
-
 thread_local = local()
-
-
-
-
 
 
 def morehands() -> None:
@@ -44,12 +40,12 @@ def get_session() -> Session:
         thread_local.session = requests.Session()
     return thread_local.session
 
+
 try:
+    localMan.scrape()
+    localMan.pushTracks()
     for x in orders.find():
         print(order(x))
 
 except:
     traceback.print_exc()
-
-
-localMan.scrape()

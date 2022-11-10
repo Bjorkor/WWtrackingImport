@@ -115,13 +115,52 @@ def pullOrder(increment_id, traverse_id):
                 print(response.status_code)
 
 def pushTracks():
+    j = '''{
+      "tracks": 
+        [
+          {
+            "track_number": null,
+            "title": null,
+            "carrier_code": null
+          }
+        ] 
+    }'''
+    j = json.loads(j)
     load_dotenv()
     dbaddr = os.getenv('DBADDR')
     client = pymongo.MongoClient(dbaddr)
     db = client["wwmongo"]
     orders = db["orders"]
     for x in orders.find({'isTracked': False}):
-        print(x['entity_id'])
+        tracknumber = str(x['tracking'])
+        entity = x['entity_id']
+        increment = x['increment_id']
+        j['tracks'][0]['title'] = f'Order #{increment}'
+        j['tracks'][0]['track_number'] = tracknumber
+        url = f'https://wwhardware.com/rest/default/V1/order/{entity}/ship'
+        j['tracks'][0]['carrier_code'] = 'Other'
+        token = os.getenv('BEARER')
+        headers = {'Authorization': f'Bearer {token}'}
+        session = get_session()
+        with session as session:
+
+            response = session.post(url, headers=headers, json=json.dumps(j))
+            # print(response.status_code)
+            # print(response.content)
+            if response.status_code == 200:
+                y = json.loads(response.content)
+                order(increment_id=increment).update('isTracked', True)
+            if response.status_code == 400:
+                print(response.content)
+            if response.status_code != 200 and response.status_code != 400:
+                # print('FFFFFF')
+                while response.status_code != 200 and response.status_code != 400:
+                    print(response.status_code)
+                    print('retrying...')
+                    time.sleep(10)
+                    response = session.post(url, headers=headers, json=json.dumps(j))
+
+
 
 def get_session() -> Session:
     if not hasattr(thread_local, 'session'):
