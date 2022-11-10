@@ -54,11 +54,11 @@ for x in orders.find({'isTracked': False}):
     j['tracks'][0]['title'] = f'Order #{increment}'
     j['tracks'][0]['track_number'] = tracknumber
     url = f'https://wwhardware.com/rest/default/V1/order/{entity}/ship'
-    if re.search(r'/\b(1Z ?[0-9A-Z]{3} ?[0-9A-Z]{3} ?[0-9A-Z]{2} ?[0-9A-Z]{4} ?[0-9A-Z]{3} ?[0-9A-Z]|[\dT]\d\d\d ?\d\d\d\d ?\d\d\d)\b/',tracknumber).span() is not None:
+    if re.search(r'/\b(1Z ?[0-9A-Z]{3} ?[0-9A-Z]{3} ?[0-9A-Z]{2} ?[0-9A-Z]{4} ?[0-9A-Z]{3} ?[0-9A-Z]|[\dT]\d\d\d ?\d\d\d\d ?\d\d\d)\b/',tracknumber):
         j['tracks'][0]['carrier_code'] = 'UPS'
-    elif re.search(r'/(\b96\d{20}\b)|(\b\d{15}\b)|(\b\d{12}\b)/', tracknumber).span() is not None or re.search(r'/\b((98\d\d\d\d\d?\d\d\d\d|98\d\d).span() ?\d\d\d\d ?\d\d\d\d( ?\d\d\d)?)\b/', tracknumber).span() is not None or re.search(r'/^[0-9]{15}$/', tracknumber).span() is not None:
+    elif re.search(r'/(\b96\d{20}\b)|(\b\d{15}\b)|(\b\d{12}\b)/', tracknumber) or re.search(r'/\b((98\d\d\d\d\d?\d\d\d\d|98\d\d) ?\d\d\d\d ?\d\d\d\d( ?\d\d\d)?)\b/', tracknumber) or re.search(r'/^[0-9]{15}$/', tracknumber):
         j['tracks'][0]['carrier_code'] = 'FedEx'
-    elif re.search(r'/(\b\d{30}\b)|(\b91\d+\b)|(\b\d{20}\b)/', tracknumber).span() is not None or re.search(r'/^E\D{1}\d{9}\D{2}$|^9\d{15,21}$/', tracknumber).span() is not None or re.search(r'/^91[0-9]+$/', tracknumber).span() is not None or re.search(r'/^[A-Za-z]{2}[0-9]+US$/', tracknumber).span() is not None:
+    elif re.search(r'/(\b\d{30}\b)|(\b91\d+\b)|(\b\d{20}\b)/', tracknumber) or re.search(r'/^E\D{1}\d{9}\D{2}$|^9\d{15,21}$/', tracknumber) or re.search(r'/^91[0-9]+$/', tracknumber) or re.search(r'/^[A-Za-z]{2}[0-9]+US$/', tracknumber):
         j['tracks'][0]['carrier_code'] = 'USPS'
     else:
         j['tracks'][0]['carrier_code'] = 'Other'
