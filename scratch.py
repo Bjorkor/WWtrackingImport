@@ -60,4 +60,6 @@ for x in orders.find({'isTracked': False}):
         j['tracks'][0]['carrier_code'] = 'FedEx'
     elif re.search(r'/(\b\d{30}\b)|(\b91\d+\b)|(\b\d{20}\b)/', tracknumber) or re.search(r'/^E\D{1}\d{9}\D{2}$|^9\d{15,21}$/', tracknumber) or re.search(r'/^91[0-9]+$/', tracknumber) or re.search(r'/^[A-Za-z]{2}[0-9]+US$/', tracknumber):
         j['tracks'][0]['carrier_code'] = 'USPS'
-print(j['tracks'])
+    else:
+        j['tracks'][0]['carrier_code'] = 'Other'
+    print(j['tracks'])
