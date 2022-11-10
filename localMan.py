@@ -142,6 +142,7 @@ def pushTracks():
         token = os.getenv('BEARER')
         headers = {'Authorization': f'Bearer {token}'}
         session = get_session()
+
         with session as session:
 
             response = session.post(url, headers=headers, json=json.dumps(j))
@@ -150,15 +151,21 @@ def pushTracks():
             if response.status_code == 200:
                 y = json.loads(response.content)
                 order(increment_id=increment).update('isTracked', True)
+                print(f'Pushed tracking info for order {increment} to magento')
             if response.status_code == 400:
                 print(response.content)
             if response.status_code != 200 and response.status_code != 400:
                 # print('FFFFFF')
+                count = 0
                 while response.status_code != 200 and response.status_code != 400:
-                    print(response.status_code)
-                    print('retrying...')
-                    time.sleep(10)
-                    response = session.post(url, headers=headers, json=json.dumps(j))
+                    if count < 6:
+                        print(response.status_code)
+                        print('retrying...')
+                        time.sleep(10)
+                        response = session.post(url, headers=headers, json=json.dumps(j))
+                        count = count + 1
+                    else:
+                        pass
 
 
 
