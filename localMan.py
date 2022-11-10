@@ -119,7 +119,7 @@ def pushTracks():
     db = client["wwmongo"]
     orders = db["orders"]
     for x in orders.find({'isTracked': False}):
-        print(x)
+        print(x['entity_id'])
 
 def get_session() -> Session:
     if not hasattr(thread_local, 'session'):
