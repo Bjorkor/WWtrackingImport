@@ -24,7 +24,7 @@ def get_session() -> Session:
     if not hasattr(thread_local, 'session'):
         thread_local.session = requests.Session()
     return thread_local.session
-json = '''{
+j = '''{
   "tracks": 
     [
       {
@@ -35,6 +35,6 @@ json = '''{
     ] 
 }'''
 
-json = json.loads(json)
+json = json.loads(j)
 
 print(json['tracks'])
