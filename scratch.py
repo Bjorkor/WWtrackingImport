@@ -41,7 +41,11 @@ trackFormats = ['']
 
 j = json.loads(j)
 
-
+load_dotenv()
+dbaddr = os.getenv('DBADDR')
+client = pymongo.MongoClient(dbaddr)
+db = client["wwmongo"]
+orders = db["orders"]
 
 for x in orders.find({'isTracked': False}):
     tracknumber = str(x['tracking'])
