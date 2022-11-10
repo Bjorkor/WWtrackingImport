@@ -8,7 +8,6 @@ import datetime
 from dotenv import load_dotenv
 import os
 from orderMan import order
-import localMan
 import json
 import pymongo
 import traceback
@@ -112,6 +111,15 @@ def pullOrder(increment_id, traverse_id):
                 time.sleep(10)
                 response = session.get(api_url, headers=headers)
                 print(response.status_code)
+
+def pushTracks():
+    load_dotenv()
+    dbaddr = os.getenv('DBADDR')
+    client = pymongo.MongoClient(dbaddr)
+    db = client["wwmongo"]
+    orders = db["orders"]
+    for x in orders.find({'isTracked': False}):
+        print(x)
 
 def get_session() -> Session:
     if not hasattr(thread_local, 'session'):
