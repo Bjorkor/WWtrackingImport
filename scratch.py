@@ -35,6 +35,8 @@ j = '''{
     ] 
 }'''
 
-json = json.loads(j)
+j = json.loads(j)
 
-print(json['tracks'])
+j['tracks'][0]['track_number'] = 'T123456'
+
+print(j['tracks'])
