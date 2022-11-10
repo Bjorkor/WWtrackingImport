@@ -15,6 +15,8 @@ import traceback
 global client
 global db
 global orders
+import re
+
 load_dotenv()
 dbaddr = os.getenv('DBADDR')
 client = pymongo.MongoClient(dbaddr)

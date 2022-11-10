@@ -4,6 +4,7 @@ import traceback
 import time
 from dotenv import load_dotenv
 import os
+import re
 
 global client
 global db

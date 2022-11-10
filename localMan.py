@@ -17,6 +17,8 @@ global orders
 import pyodbc
 import pandas as pd
 thread_local = local()
+import re
+
 def scrape():
     server = "WIN-PBL82ADEL98.HDLUSA.LAN,49816,49816"
     database = "HDL"

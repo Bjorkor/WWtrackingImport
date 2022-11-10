@@ -17,6 +17,8 @@ global db
 global orders
 import pyodbc
 import pandas as pd
+import re
+
 thread_local = local()
 
 
@@ -30,13 +32,28 @@ j = '''{
       {
         "track_number": null,
         "title": null,
-        "carrier": null
+        "carrier_code": null
       }
     ] 
 }'''
 
+trackFormats = ['']
+
 j = json.loads(j)
 
-j['tracks'][0]['track_number'] = 'T123456'
 
+
+for x in orders.find({'isTracked': False}):
+    tracknumber = str(x['tracking'])
+    entity = x['entity_id']
+    increment = x['increment_id']
+    j['tracks'][0]['title'] = f'Order #{increment}'
+    j['tracks'][0]['track_number'] = tracknumber
+    url = f'https://wwhardware.com/rest/default/V1/order/{entity}/ship'
+    if re.search(r'/\b(1Z ?[0-9A-Z]{3} ?[0-9A-Z]{3} ?[0-9A-Z]{2} ?[0-9A-Z]{4} ?[0-9A-Z]{3} ?[0-9A-Z]|[\dT]\d\d\d ?\d\d\d\d ?\d\d\d)\b/',tracknumber):
+        j['tracks'][0]['carrier_code'] = 'UPS'
+    elif re.search(r'/(\b96\d{20}\b)|(\b\d{15}\b)|(\b\d{12}\b)/', tracknumber) or re.search(r'/\b((98\d\d\d\d\d?\d\d\d\d|98\d\d) ?\d\d\d\d ?\d\d\d\d( ?\d\d\d)?)\b/', tracknumber) or re.search(r'/^[0-9]{15}$/', tracknumber):
+        j['tracks'][0]['carrier_code'] = 'FedEx'
+    elif re.search(r'/(\b\d{30}\b)|(\b91\d+\b)|(\b\d{20}\b)/', tracknumber) or re.search(r'/^E\D{1}\d{9}\D{2}$|^9\d{15,21}$/', tracknumber) or re.search(r'/^91[0-9]+$/', tracknumber) or re.search(r'/^[A-Za-z]{2}[0-9]+US$/', tracknumber):
+        j['tracks'][0]['carrier_code'] = 'USPS'
 print(j['tracks'])
