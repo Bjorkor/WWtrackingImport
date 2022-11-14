@@ -37,6 +37,6 @@ load_dotenv()
 dbaddr = os.getenv('DBADDR')
 client = pymongo.MongoClient(dbaddr)
 db = client["wwmongo"]
-imports = db["imports"]
+wwimports = db["imports"]
 
 imports.imports()
