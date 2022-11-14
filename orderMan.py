@@ -157,7 +157,7 @@ class imports:
         return self
 
     def imports(self):
-        print(json.dumps(self))
+        print(self)
         '''load_dotenv()
         dbaddr = os.getenv('DBADDR')
         client = pymongo.MongoClient(dbaddr)
