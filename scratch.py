@@ -8,6 +8,7 @@ import datetime
 from dotenv import load_dotenv
 import os
 from orderMan import order
+from orderMan import imports
 import localMan
 import json
 import pymongo
@@ -26,34 +27,16 @@ def get_session() -> Session:
     if not hasattr(thread_local, 'session'):
         thread_local.session = requests.Session()
     return thread_local.session
-j = '''{
-  "tracks": 
-    [
-      {
-        "track_number": null,
-        "title": null,
-        "carrier_code": null
-      }
-    ] 
-}'''
 
-trackFormats = ['']
 
-j = json.loads(j)
+
+
+
 
 load_dotenv()
 dbaddr = os.getenv('DBADDR')
 client = pymongo.MongoClient(dbaddr)
 db = client["wwmongo"]
-orders = db["orders"]
+imports = db["imports"]
 
-for x in orders.find({'isTracked': False}):
-    tracknumber = str(x['tracking'])
-    entity = x['entity_id']
-    increment = x['increment_id']
-    j['tracks'][0]['title'] = f'Order #{increment}'
-    j['tracks'][0]['track_number'] = tracknumber
-    url = f'https://wwhardware.com/rest/default/V1/order/{entity}/ship'
-    j['tracks'][0]['carrier_code'] = 'Other'
-    print(json.dumps(j))
-    print(url)
+imports.imports()
