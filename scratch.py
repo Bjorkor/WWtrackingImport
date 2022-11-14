@@ -39,4 +39,4 @@ client = pymongo.MongoClient(dbaddr)
 db = client["wwmongo"]
 wwimports = db["imports"]
 
-imports.imports()
+imports(Order_Number=1, Order_Date=datetime.datetime.utcnow()).imports()
