@@ -234,3 +234,4 @@ fabric.properties
 .idea/vcs.xml
 .idea/WWtrackingImport.iml
 localpants.csv
+*.csv
