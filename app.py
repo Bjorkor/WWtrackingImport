@@ -43,7 +43,7 @@ def get_session() -> Session:
 
 try:
     localMan.scrape()
-    localMan.pushTracks()
+    #localMan.pushTracks()
     for x in orders.find():
         print(order(x))
 

@@ -20,11 +20,12 @@ orders = db["orders"]
 
 
 class order:
-    def __init__(self, entity_id=None, increment_id=None, traverse_id=None, tracking=None):
+    def __init__(self, entity_id=None, increment_id=None, traverse_id=None, tracking=None, isTracked=False):
         self.entity_id = entity_id
         self.increment_id = increment_id
         self.traverse_id = traverse_id
         self.tracking = tracking
+        self.isTracked = isTracked
         #print(f'the object has entity_id: {self.entity_id}')
 
     def __str__(self):

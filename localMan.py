@@ -31,7 +31,7 @@ def scrape():
         # then continue with ...
         # pyodbc.connect(conn_str)
         # ... etc.
-        # print(conn_str)
+        print(conn_str)
         try:
             cnxn = pyodbc.connect(driver=driver_name, server=server, database=database, trusted_connection='yes')
             cursor = cnxn.cursor()
