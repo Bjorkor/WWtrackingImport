@@ -47,11 +47,11 @@ def pullLocal():
                 cursor = cnxn.cursor()
             except pyodbc.Error as ex:
                 msg = ex.args[1]
-            if re.search('No Kerberos', msg):
-                print('You must login using kinit before using this script.')
-                exit(1)
-            else:
-                raise
+                if re.search('No Kerberos', msg):
+                    print('You must login using kinit before using this script.')
+                    exit(1)
+                else:
+                    raise
             dims = """SELECT  * FROM dbo.tblSHQdims"""
             lines = """SELECT  * FROM tblSoTransDetail"""
             header = """SELECT  * FROM tblSoTransHeader"""
