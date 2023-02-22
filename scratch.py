@@ -91,7 +91,7 @@ df = pd.DataFrame(columns=header)
 units = pullLocal()
 session = get_session()
 with session as session:
-    api_url = 'https://wwhardware.com/rest/default/V1/orders?searchCriteria[pageSize]=1&searchCriteria[filterGroups][0][filters][0][field]=increment_id&searchCriteria[filterGroups][0][filters][0][value]=2000306986'
+    api_url = 'https://wwhardware.com/rest/default/V1/orders?searchCriteria[pageSize]=1&searchCriteria[filterGroups][0][filters][0][field]=increment_id&searchCriteria[filterGroups][0][filters][0][value]=2000307418'
 
     response = session.get(api_url, headers=headers)
     # print(response.status_code)
