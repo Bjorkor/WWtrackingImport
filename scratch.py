@@ -92,151 +92,154 @@ units = pullLocal()
 session = get_session()
 with session as session:
     api_url = 'https://wwhardware.com/rest/default/V1/orders?searchCriteria[pageSize]=1&searchCriteria[filterGroups][0][filters][0][field]=increment_id&searchCriteria[filterGroups][0][filters][0][value]=2000307418'
+    api_url_proc = 'https://wwhardware.com/rest/default/V1/orders?searchCriteria[pageSize]=1000&searchCriteria[filterGroups][0][filters][0][field]=status&searchCriteria[filterGroups][0][filters][0][value]=processing'
 
-    response = session.get(api_url, headers=headers)
+
+
+    response = session.get(api_url_proc, headers=headers)
     # print(response.status_code)
     # print(response.content)
     if response.status_code == 200:
-        y = json.loads(response.content)
-        print(response.content)
+        yres = json.loads(response.content)
+        #print(response.content)
 
-
-        this_order_number = y['items'][0]['increment_id']
-        this_order_date = y['items'][0]['created_at']
-        cfname = y['items'][0]['billing_address']['firstname']
-        clname = y['items'][0]['billing_address']['lastname']
-        baddone = y['items'][0]['billing_address']['street'][0]
-        if len(y['items'][0]['billing_address']['street']) > 1:
-            baddtwo = y['items'][0]['billing_address']['street'][1]
-        else:
-            baddtwo = None
-        ccity = y['items'][0]['billing_address']['city']
-        cstate = y['items'][0]['billing_address']['region']
-        czip = y['items'][0]['billing_address']['postcode']
-        ccountry_code = y['items'][0]['billing_address']['country_id']
-
-        hphone = y['items'][0]['billing_address']['telephone']
-        this_email = y['items'][0]['billing_address']['email']
-        sfname = y['items'][0]['extension_attributes']['shipping_assignments'][0]['shipping']['address']['firstname']
-        slname = y['items'][0]['extension_attributes']['shipping_assignments'][0]['shipping']['address']['lastname']
-        saddone = y['items'][0]['extension_attributes']['shipping_assignments'][0]['shipping']['address']['street'][0]
-        if len(y['items'][0]['extension_attributes']['shipping_assignments'][0]['shipping']['address']['street']) > 1:
-            saddtwo = y['items'][0]['extension_attributes']['shipping_assignments'][0]['shipping']['address']['street'][1]
-        else:
-            saddtwo = None
-        scity = y['items'][0]['extension_attributes']['shipping_assignments'][0]['shipping']['address']['city']
-        sstate = y['items'][0]['extension_attributes']['shipping_assignments'][0]['shipping']['address']['region']
-        szip = y['items'][0]['extension_attributes']['shipping_assignments'][0]['shipping']['address']['postcode']
-        scountry_code = y['items'][0]['extension_attributes']['shipping_assignments'][0]['shipping']['address']['country_id']
-        sphone = y['items'][0]['extension_attributes']['shipping_assignments'][0]['shipping']['address']['telephone']
-        shipping = y['items'][0]['shipping_invoiced']
-        payment_type = y['items'][0]['payment']['method']
-        ship_method = y['items'][0]['shipping_description']
-        #co_name = y['items'][0]['extension_attributes']['shipping_assignments'][0]['shipping']['address']['company']
-        icount = 0
-        for i in y['items'][0]['items']:
-            sku = i['sku']
-            qty = i['qty_ordered']
-            price = i['base_price']
-            unit = None
-            tax_rate = 0
-            promo_code = None
-            discount = i['discount_invoiced']
-            comments = None
-            unit = None
-            cut_list = None
-            cut_charge = None
-            if ccountry_code == 'US':
-                order_dict = {
-                    'Order Number': this_order_number,
-                    'Order Date': this_order_date,
-                    'Customer Firstname': cfname,
-                    'Customer Lastname': clname,
-                    'Customer Number': None,
-                    'Address 1': baddone,
-                    'Address 2': baddtwo,
-                    'City': ccity,
-                    'State': cstate,
-                    'Zip': czip,
-                    'Province/Other': None,
-                    'Country': ccountry_code,
-                    'Home Phone': hphone,
-                    'Work Phone': None,
-                    'Work Ext': None,
-                    'Email': this_email,
-                    'Ship Name': f"{sfname} {slname}",
-                    'Ship Address 1': saddone,
-                    'Ship Address 2': saddtwo,
-                    'Ship City': scity,
-                    'Ship State': sstate,
-                    'Ship Zip': szip,
-                    'Ship Province/Other': None,
-                    'Ship Country': scountry_code,
-                    'Ship Phone': sphone,
-                    'Product ID': sku,
-                    'Quantity': qty,
-                    'Unit Price': price,
-                    'Cut List': cut_list,
-                    'Cut Charge': cut_charge,
-                    'Shipping Cost': shipping,
-                    'Tax Rate': tax_rate,
-                    'Promotion Code': promo_code,
-                    'Discount': discount,
-                    'Shipping Method': ship_method,
-                    'Payment Type': payment_type,
-                    'Comments': comments,
-                    'Company Name': None
-                }
+        for y in yres['items']:
+            this_order_number = y['increment_id']
+            this_order_date = y['created_at']
+            cfname = y['billing_address']['firstname']
+            clname = y['billing_address']['lastname']
+            baddone = y['billing_address']['street'][0]
+            if len(y['billing_address']['street']) > 1:
+                baddtwo = y['billing_address']['street'][1]
             else:
-                order_dict = {
-                    'Order Number': this_order_number,
-                    'Order Date': this_order_date,
-                    'Customer Firstname': cfname,
-                    'Customer Lastname': clname,
-                    'Customer Number': None,
-                    'Address 1': baddone,
-                    'Address 2': baddtwo,
-                    'City': ccity,
-                    'State': None,
-                    'Zip': czip,
-                    'Province/Other': cstate,
-                    'Country': ccountry_code,
-                    'Home Phone': hphone,
-                    'Work Phone': None,
-                    'Work Ext': None,
-                    'Email': this_email,
-                    'Ship Name': f"{sfname} {slname}",
-                    'Ship Address 1': saddone,
-                    'Ship Address 2': saddtwo,
-                    'Ship City': scity,
-                    'Ship State': None,
-                    'Ship Zip': szip,
-                    'Ship Province/Other': cstate,
-                    'Ship Country': scountry_code,
-                    'Ship Phone': sphone,
-                    'Product ID': sku,
-                    'Quantity': qty,
-                    'Unit Price': price,
-                    'Cut List': cut_list,
-                    'Cut Charge': cut_charge,
-                    'Shipping Cost': shipping,
-                    'Tax Rate': tax_rate,
-                    'Promotion Code': promo_code,
-                    'Discount': discount,
-                    'Shipping Method': ship_method,
-                    'Payment Type': payment_type,
-                    'Comments': comments,
-                    'Company Name': None
-                }
-            if icount == 0:
-                order_dict['Tax Rate'] = y['items'][0]['tax_invoiced']
-            order = pd.Series(order_dict)
-            df = pd.concat([df, order.to_frame().T])
-            print(sku)
-            icount = icount + 1
-    df = df.merge(right=pullLocal(), how='left', on='Product ID')
-    df.to_csv('test.csv', index=False)
-    print(df)
+                baddtwo = None
+            ccity = y['billing_address']['city']
+            cstate = y['billing_address']['region']
+            czip = y['billing_address']['postcode']
+            ccountry_code = y['billing_address']['country_id']
+
+            hphone = y['billing_address']['telephone']
+            this_email = y['billing_address']['email']
+            sfname = y['extension_attributes']['shipping_assignments'][0]['shipping']['address']['firstname']
+            slname = y['extension_attributes']['shipping_assignments'][0]['shipping']['address']['lastname']
+            saddone = y['extension_attributes']['shipping_assignments'][0]['shipping']['address']['street'][0]
+            if len(y['extension_attributes']['shipping_assignments'][0]['shipping']['address']['street']) > 1:
+                saddtwo = y['extension_attributes']['shipping_assignments'][0]['shipping']['address']['street'][1]
+            else:
+                saddtwo = None
+            scity = y['extension_attributes']['shipping_assignments'][0]['shipping']['address']['city']
+            sstate = y['extension_attributes']['shipping_assignments'][0]['shipping']['address']['region']
+            szip = y['extension_attributes']['shipping_assignments'][0]['shipping']['address']['postcode']
+            scountry_code = y['extension_attributes']['shipping_assignments'][0]['shipping']['address']['country_id']
+            sphone = y['extension_attributes']['shipping_assignments'][0]['shipping']['address']['telephone']
+            shipping = y['shipping_invoiced']
+            payment_type = y['payment']['method']
+            ship_method = y['shipping_description']
+            #co_name = y['extension_attributes']['shipping_assignments'][0]['shipping']['address']['company']
+            icount = 0
+            for i in y['items'][0]['items']:
+                sku = i['sku']
+                qty = i['qty_ordered']
+                price = i['base_price']
+                unit = None
+                tax_rate = 0
+                promo_code = None
+                discount = i['discount_invoiced']
+                comments = None
+                unit = None
+                cut_list = None
+                cut_charge = None
+                if ccountry_code == 'US':
+                    order_dict = {
+                        'Order Number': this_order_number,
+                        'Order Date': this_order_date,
+                        'Customer Firstname': cfname,
+                        'Customer Lastname': clname,
+                        'Customer Number': None,
+                        'Address 1': baddone,
+                        'Address 2': baddtwo,
+                        'City': ccity,
+                        'State': cstate,
+                        'Zip': czip,
+                        'Province/Other': None,
+                        'Country': ccountry_code,
+                        'Home Phone': hphone,
+                        'Work Phone': None,
+                        'Work Ext': None,
+                        'Email': this_email,
+                        'Ship Name': f"{sfname} {slname}",
+                        'Ship Address 1': saddone,
+                        'Ship Address 2': saddtwo,
+                        'Ship City': scity,
+                        'Ship State': sstate,
+                        'Ship Zip': szip,
+                        'Ship Province/Other': None,
+                        'Ship Country': scountry_code,
+                        'Ship Phone': sphone,
+                        'Product ID': sku,
+                        'Quantity': qty,
+                        'Unit Price': price,
+                        'Cut List': cut_list,
+                        'Cut Charge': cut_charge,
+                        'Shipping Cost': shipping,
+                        'Tax Rate': tax_rate,
+                        'Promotion Code': promo_code,
+                        'Discount': discount,
+                        'Shipping Method': ship_method,
+                        'Payment Type': payment_type,
+                        'Comments': comments,
+                        'Company Name': None
+                    }
+                else:
+                    order_dict = {
+                        'Order Number': this_order_number,
+                        'Order Date': this_order_date,
+                        'Customer Firstname': cfname,
+                        'Customer Lastname': clname,
+                        'Customer Number': None,
+                        'Address 1': baddone,
+                        'Address 2': baddtwo,
+                        'City': ccity,
+                        'State': None,
+                        'Zip': czip,
+                        'Province/Other': cstate,
+                        'Country': ccountry_code,
+                        'Home Phone': hphone,
+                        'Work Phone': None,
+                        'Work Ext': None,
+                        'Email': this_email,
+                        'Ship Name': f"{sfname} {slname}",
+                        'Ship Address 1': saddone,
+                        'Ship Address 2': saddtwo,
+                        'Ship City': scity,
+                        'Ship State': None,
+                        'Ship Zip': szip,
+                        'Ship Province/Other': cstate,
+                        'Ship Country': scountry_code,
+                        'Ship Phone': sphone,
+                        'Product ID': sku,
+                        'Quantity': qty,
+                        'Unit Price': price,
+                        'Cut List': cut_list,
+                        'Cut Charge': cut_charge,
+                        'Shipping Cost': shipping,
+                        'Tax Rate': tax_rate,
+                        'Promotion Code': promo_code,
+                        'Discount': discount,
+                        'Shipping Method': ship_method,
+                        'Payment Type': payment_type,
+                        'Comments': comments,
+                        'Company Name': None
+                    }
+                if icount == 0:
+                    order_dict['Tax Rate'] = y['items'][0]['tax_invoiced']
+                order = pd.Series(order_dict)
+                df = pd.concat([df, order.to_frame().T])
+                print(sku)
+                icount = icount + 1
+        df = df.merge(right=pullLocal(), how='left', on='Product ID')
+        df.to_csv('test.csv', index=False)
+        print(df)
 
 
 
