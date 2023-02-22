@@ -157,6 +157,9 @@ class imports:
         d = ', '.join(map(str, gen))'''
         return self
 
+    def new(self):
+        print(self)
+
     def imports(self):
         print(self)
         '''load_dotenv()
