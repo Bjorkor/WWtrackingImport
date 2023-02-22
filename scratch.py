@@ -7,8 +7,8 @@ import time
 import datetime
 from dotenv import load_dotenv
 import os
-from orderMan import order
-from orderMan import imports
+#from orderMan import order
+#from orderMan import imports
 import localMan
 import json
 import pymongo
@@ -76,7 +76,7 @@ load_dotenv()
 dbaddr = os.getenv('DBADDR')
 client = pymongo.MongoClient(dbaddr)
 db = client["wwmongo"]
-wwimports = db["imports"]
+#wwimports = db["imports"]
 variable_names = ['this_order_number', 'this_order_date', 'cfname', 'clname', 'baddone', 'baddtwo', 'ccity', 'cstate', 'czip', 'ccountry_code', 'hphone', 'this_email', 'sfname', 'slname', 'saddone', 'saddtwo', 'scity', 'sstate', 'szip', 'scountry_code', 'sphone', 'shipping', 'payment_type', 'ship_method', 'sku', 'qty', 'price', 'unit', 'tax_rate', 'promo_code', 'discount', 'comments', 'cut_list', 'cut_charge']
 header = [
     'Order Number', 'Order Date', 'Customer Firstname', 'Customer Lastname', 'Customer Number',
