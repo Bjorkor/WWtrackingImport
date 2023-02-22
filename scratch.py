@@ -133,12 +133,13 @@ with session as session:
         payment_type = y['items'][0]['payment']['method']
         ship_method = y['items'][0]['shipping_description']
         #co_name = y['items'][0]['extension_attributes']['shipping_assignments'][0]['shipping']['address']['company']
+        icount = 0
         for i in y['items'][0]['items']:
             sku = i['sku']
             qty = i['qty_ordered']
             price = i['base_price']
             unit = None
-            tax_rate = i['base_tax_invoiced']
+            tax_rate = 0
             promo_code = None
             discount = i['discount_invoiced']
             comments = None
@@ -227,9 +228,12 @@ with session as session:
                     'Comments': comments,
                     'Company Name': None
                 }
+            if icount == 0:
+                order_dict['Tax Rate'] = y['items'][0]['tax_invoiced']
             order = pd.Series(order_dict)
             df = pd.concat([df, order.to_frame().T])
             print(sku)
+            icount = icount + 1
     df = df.merge(right=pullLocal(), how='left', on='Product ID')
     df.to_csv('test.csv', index=False)
     print(df)
