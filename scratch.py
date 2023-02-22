@@ -233,10 +233,13 @@ with session as session:
                     }
                 if icount == 0:
                     order_dict['Tax Rate'] = y['items'][0]['tax_invoiced']
-                order = pd.Series(order_dict)
-                df = pd.concat([df, order.to_frame().T])
-                print(sku)
-                icount = icount + 1
+                if str(order_dict['Product ID']).startswith('x'):
+                    pass
+                else:
+                    order = pd.Series(order_dict)
+                    df = pd.concat([df, order.to_frame().T])
+                    print(sku)
+                    icount = icount + 1
         df = df.merge(right=pullLocal(), how='left', on='Product ID')
         df.to_csv('test.csv', index=False)
         print(df)
