@@ -64,7 +64,7 @@ def pullLocal():
             df = pd.read_sql(query, cnxn)
             print('data pulled')
             cnxn.close()
-            df.rename(columns={"Product ID": "sku", "MASTER_REC_UT": "Unit"}, inplace=True)
+            df.rename(columns={"MASTER_STOCKNO": "Product ID", "MASTER_REC_UT": "Unit"}, inplace=True)
             return df
 
 
