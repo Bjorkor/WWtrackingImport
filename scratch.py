@@ -137,7 +137,7 @@ with session as session:
             ship_method = y['shipping_description']
             #co_name = y['extension_attributes']['shipping_assignments'][0]['shipping']['address']['company']
             icount = 0
-            for i in y['items'][0]['items']:
+            for i in y['items']:
                 sku = i['sku']
                 qty = i['qty_ordered']
                 price = i['base_price']
