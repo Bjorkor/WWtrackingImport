@@ -216,7 +216,6 @@ with session as session:
                     'Product ID': sku,
                     'Quantity': qty,
                     'Unit Price': price,
-                    'Unit': unit,
                     'Cut List': cut_list,
                     'Cut Charge': cut_charge,
                     'Shipping Cost': shipping,
