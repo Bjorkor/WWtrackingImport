@@ -244,7 +244,7 @@ with session as session:
                     icount = icount + 1
         df = df.merge(right=pullLocal(), how='left', on='Product ID')
         df.drop('Unit_x', axis=1, inplace=True)
-        df.rename(columns={'Unit_y': 'Unit'})
+        df.rename(columns={'Unit_y': 'Unit'}, inplace=True)
         print(df)
         df = df[header2]
         df.to_csv('test.csv', index=False)
