@@ -86,8 +86,10 @@ header = [
     'Quantity', 'Unit Price', 'Cut List', 'Cut Charge', 'Shipping Cost', 'Tax Rate',
     'Promotion Code', 'Discount', 'Shipping Method', 'Payment Type', 'Comments', 'Company Name'
 ]
+header2 = ["Order Number", "Order Date", "Customer Firstname", "Customer Lastname", "Customer Number", "Address 1", "Address 2", "City", "State", "Zip", "Province/Other", "Country", "Home Phone", "Work Phone", "Work Ext", "Email", "Ship Name", "Ship Address 1", "Ship Address 2", "Ship City", "Ship State", "Ship Zip", "Ship Province/Other", "Ship Country", "Ship Phone", "Product ID", "Quantity", "Unit Price", "Unit", "Cut List", "Cut Charge", "Shipping Cost", "Tax Rate", "Promotion Code", "Discount", "Shipping Method", "Payment Type", "Comments", "Company", "RepId", "ShipAtt"]
+
 #imports(Order_Number=1, Order_Date=datetime.datetime.utcnow()).imports()
-df = pd.DataFrame(columns=header)
+df = pd.DataFrame(columns=header2)
 units = pullLocal()
 session = get_session()
 with session as session:
