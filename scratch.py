@@ -243,7 +243,9 @@ with session as session:
                     print(sku)
                     icount = icount + 1
         df = df.merge(right=pullLocal(), how='left', on='Product ID')
-
+        df.drop('unit_x', inplace=True)
+        df.rename(columns={'unit_y': 'unit'})
+        df = df[[header2]]
         df.to_csv('test.csv', index=False)
         print(df)
 
