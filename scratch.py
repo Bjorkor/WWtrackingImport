@@ -247,8 +247,34 @@ with session as session:
         df.rename(columns={'Unit_y': 'Unit'}, inplace=True)
         print(df)
         df = df[header2]
-        df.to_csv('test.csv', index=False)
+        shipMapping = {
+            'Ground': 'R02R',
+            '3 Day Select': 'U21',
+            '2nd Day Air PM': 'U07',
+            'Next Day Air PM': 'U43',
+            'UPS Standard': 'U12',
+            'UPS┬« Ground': 'U12',
+            'UPS 3 Day Select┬«': 'U21',
+            'Free': 'RES',
+            'UPS Expedited': 'U12',
+            'Priority Mail': 'M02',
+            'UPSÂ® Ground': 'U12',
+            'Spee-Dee': 'SPD',
+            'First-Class Mail Package Service': 'M01',
+            'UPS Next Day Air SaverÂ®': 'U43',
+            'UPS Next Day AirÂ®': 'U01',
+            'UPS 2nd Day AirÂ®': 'U07',
+            'UPS Next Day AirÂ® Early': 'U60',
+            'Truck': 'TRUCK',
+            'UPS Next Day Air SaverÂ®': 'U43',
+            'UPS Next Day AirÂ®': 'U01',
+            'UPS 2nd Day Air┬«': 'U07',
+            'Priority Overnight': 'F01',
+            '2nd Day': 'F11',
+        }
+        df['Shipping Method'] = df['Shipping Method'].replace(shipMapping)
         print(df)
+        df.to_csv('test.csv', index=False)
 
 
 
