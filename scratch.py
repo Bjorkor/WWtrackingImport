@@ -286,5 +286,5 @@ with session as session:
         while response.status_code != 200 and response.status_code != 400:
             print('retrying...')
             time.sleep(10)
-            response = session.get(api_url, headers=headers)
+            response = session.get(api_url_proc, headers=headers)
             print(response.status_code)
