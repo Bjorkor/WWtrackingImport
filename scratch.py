@@ -274,7 +274,7 @@ with session as session:
         }
         df['Shipping Method'] = df['Shipping Method'].replace(shipMapping)
         print(df)
-        df.to_csv('test.csv', index=False)
+        df.to_csv('test' + str(datetime.datetime.utcnow()) + '.csv', index=False)
 
 
 
