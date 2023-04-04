@@ -139,6 +139,7 @@ with session as session:
             ship_method = y['shipping_description']
             #co_name = y['extension_attributes']['shipping_assignments'][0]['shipping']['address']['company']
             icount = 0
+            real_tax_rate = y['base_tax_invoiced']
             for i in y['items']:
                 sku = i['sku']
                 qty = i['qty_ordered']
@@ -148,7 +149,7 @@ with session as session:
                 promo_code = None
                 discount = i['discount_invoiced']
                 comments = None
-                unit = None
+
                 cut_list = None
                 cut_charge = None
                 if ccountry_code == 'US':
@@ -234,7 +235,8 @@ with session as session:
                         'Company Name': None
                     }
                 if icount == 0:
-                    order_dict['Tax Rate'] = y['items'][0]['tax_invoiced']
+                    order_dict['Tax Rate'] = real_tax_rate
+                    icount = icount + 1
                 if order_dict['Product ID'].startswith('X'):
                     pass
                 else:
