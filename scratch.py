@@ -27,6 +27,7 @@ thread_local = local()
 
 token = os.getenv('BEARER')
 headers = {'Authorization': f'Bearer {token}'}
+headers2 = {'Authorization': f'Bearer {token}', 'Accept': 'application/pdf'}
 now = str(datetime.datetime.utcnow())
 
 def get_session() -> Session:
@@ -313,7 +314,7 @@ for index,row in entdf.iterrows():
     session = get_session()
     with session as session:
         enturl = f'https://wwhardware.com/rest/default/V1/invoices?searchCriteria[filterGroups][0][filters][0][field]=order_id&searchCriteria[filterGroups][0][filters][0][value]={entity}'
-        response = session.get(enturl, headers=headers)
+        response = session.get(enturl, headers=headers2)
         if response.status_code == 200:
             yres = json.loads(response.content)
             print(response.headers.get('content-type'))
