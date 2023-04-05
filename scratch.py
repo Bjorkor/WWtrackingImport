@@ -110,6 +110,7 @@ with session as session:
             this_order_date = y['created_at']
             cfname = y['billing_address']['firstname']
             clname = y['billing_address']['lastname']
+            att = cfname + ' ' + clname
             baddone = y['billing_address']['street'][0]
             if len(y['billing_address']['street']) > 1:
                 baddtwo = y['billing_address']['street'][1]
@@ -119,7 +120,7 @@ with session as session:
             cstate = y['billing_address']['region']
             czip = y['billing_address']['postcode']
             ccountry_code = y['billing_address']['country_id']
-
+            company = y['billing_address']['company']
             hphone = y['billing_address']['telephone']
             this_email = y['billing_address']['email']
             sfname = y['extension_attributes']['shipping_assignments'][0]['shipping']['address']['firstname']
@@ -192,7 +193,8 @@ with session as session:
                         'Shipping Method': ship_method,
                         'Payment Type': payment_type,
                         'Comments': comments,
-                        'Company Name': None
+                        'Company Name': company,
+                        'ShipAtt': att
                     }
                 else:
                     order_dict = {
@@ -233,7 +235,8 @@ with session as session:
                         'Shipping Method': ship_method,
                         'Payment Type': payment_type,
                         'Comments': comments,
-                        'Company Name': None
+                        'Company Name': company,
+                        'ShipAtt': att
                     }
                 if icount == 0:
                     order_dict['Tax Rate'] = real_tax_rate
