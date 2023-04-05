@@ -196,7 +196,7 @@ with session as session:
                         'Shipping Method': ship_method,
                         'Payment Type': payment_type,
                         'Comments': comments,
-                        'Company Name': company,
+                        'Company': company,
                         'ShipAtt': att
                     }
                 else:
@@ -238,7 +238,7 @@ with session as session:
                         'Shipping Method': ship_method,
                         'Payment Type': payment_type,
                         'Comments': comments,
-                        'Company Name': company,
+                        'Company': company,
                         'ShipAtt': att
                     }
                 if icount == 0:
