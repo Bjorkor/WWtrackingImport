@@ -318,7 +318,7 @@ for index,row in entdf.iterrows():
         if response.status_code == 200:
             yres = json.loads(response.content)
             print(response.headers.get('content-type'))
-            '''open(f'{entity} invoice.pdf', 'wb').write(response.content)'''
+            open(f'{entity} invoice.pdf', 'wb').write(response.content)
 
 password = os.getenv('EMAIL_CRED')
 context = ssl.create_default_context()
