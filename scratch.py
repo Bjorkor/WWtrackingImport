@@ -93,6 +93,7 @@ header2 = ["Order Number", "Order Date", "Customer Firstname", "Customer Lastnam
 
 #imports(Order_Number=1, Order_Date=datetime.datetime.utcnow()).imports()
 df = pd.DataFrame(columns=header2)
+entdf = pd.DataFrame(columns=['entity', 'order number'])
 units = pullLocal()
 session = get_session()
 with session as session:
@@ -109,7 +110,11 @@ with session as session:
         #print(response.content)
 
         for y in yres['items']:
+            entity_id = y['entity_id']
             this_order_number = y['increment_id']
+            entd = {'entity': entity_id, 'order number': this_order_number}
+            ents = pd.Series(entd)
+            entdf = pd.concat([entdf, ents.to_frame().T])
             this_order_date = y['created_at']
             cfname = y['billing_address']['firstname']
             clname = y['billing_address']['lastname']
@@ -303,8 +308,7 @@ with session as session:
             print(response.status_code)
 
 
-for index,row in df.iterrows():
-    print(row)
+print(entdf)
 
 
 password = os.getenv('EMAIL_CRED')
