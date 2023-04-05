@@ -19,6 +19,9 @@ global orders
 import pyodbc
 import pandas as pd
 import re
+import smtplib, ssl
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
 
 thread_local = local()
 
@@ -284,7 +287,7 @@ with session as session:
         }
         df['Shipping Method'] = df['Shipping Method'].replace(shipMapping)
         print(df)
-        df.to_csv('test' + str(datetime.datetime.utcnow()) + '.csv', index=False)
+        df.to_csv('WWAutoOrderImport' + ' ' + str(datetime.datetime.utcnow()) + '.csv', index=False)
 
 
 
@@ -298,3 +301,16 @@ with session as session:
             time.sleep(10)
             response = session.get(api_url_proc, headers=headers)
             print(response.status_code)
+
+
+for index,row in df.iterrows():
+    print(row)
+
+
+password = os.getenv('EMAIL_CRED')
+context = ssl.create_default_context()
+msg = MIMEMultipart()
+
+msg['To'] = 'sales@hdlusa.com'
+msg['Subject'] = '[AUTOMATIC] WW Order Import ' + str(datetime.datetime.utcnow())
+
