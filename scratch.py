@@ -120,7 +120,7 @@ with session as session:
             cstate = y['billing_address']['region']
             czip = y['billing_address']['postcode']
             ccountry_code = y['billing_address']['country_id']
-            if y['billing_address']['company']:
+            if 'company' in y['billing_address']:
                 company = y['billing_address']['company']
             else:
                 company = None
