@@ -27,7 +27,7 @@ thread_local = local()
 
 token = os.getenv('BEARER')
 headers = {'Authorization': f'Bearer {token}'}
-
+now = str(datetime.datetime.utcnow())
 
 def get_session() -> Session:
     if not hasattr(thread_local, 'session'):
@@ -292,7 +292,7 @@ with session as session:
         }
         df['Shipping Method'] = df['Shipping Method'].replace(shipMapping)
         print(df)
-        df.to_csv('WWAutoOrderImport' + ' ' + str(datetime.datetime.utcnow()) + '.csv', index=False)
+        df.to_csv('WWAutoOrderImport' + ' ' + now + '.csv', index=False)
 
 
 
@@ -308,13 +308,20 @@ with session as session:
             print(response.status_code)
 
 
-print(entdf)
-
+for index,row in entdf.iterrows():
+    entity = row['entity']
+    session = get_session()
+    with session as session:
+        enturl = f'https://wwhardware.com/rest/default/V1/invoices?searchCriteria[filterGroups][0][filters][0][field]=order_id&searchCriteria[filterGroups][0][filters][0][value]={entity}'
+        response = session.get(enturl, headers=headers)
+        if response.status_code == 200:
+            yres = json.loads(response.content)
+            print(response.content)
 
 password = os.getenv('EMAIL_CRED')
 context = ssl.create_default_context()
 msg = MIMEMultipart()
 
 msg['To'] = 'sales@hdlusa.com'
-msg['Subject'] = '[AUTOMATIC] WW Order Import ' + str(datetime.datetime.utcnow())
+msg['Subject'] = '[AUTOMATIC] WW Order Import ' + now
 
