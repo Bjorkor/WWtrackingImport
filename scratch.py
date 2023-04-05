@@ -134,7 +134,8 @@ with session as session:
             szip = y['extension_attributes']['shipping_assignments'][0]['shipping']['address']['postcode']
             scountry_code = y['extension_attributes']['shipping_assignments'][0]['shipping']['address']['country_id']
             sphone = y['extension_attributes']['shipping_assignments'][0]['shipping']['address']['telephone']
-            shipping = y['shipping_invoiced']
+            real_shipping = y['shipping_invoiced']
+            shipping = 0
             payment_type = y['payment']['method']
             ship_method = y['shipping_description']
             #co_name = y['extension_attributes']['shipping_assignments'][0]['shipping']['address']['company']
@@ -236,6 +237,7 @@ with session as session:
                     }
                 if icount == 0:
                     order_dict['Tax Rate'] = real_tax_rate
+                    order_dict['Shipping Cost'] = real_shipping
                     icount = icount + 1
                 if order_dict['Product ID'].startswith('X'):
                     pass
