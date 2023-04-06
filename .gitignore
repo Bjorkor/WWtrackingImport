@@ -236,3 +236,5 @@ fabric.properties
 localpants.csv
 *.csv
 s2.py
+order_invoice.pdf
+*.pdf
