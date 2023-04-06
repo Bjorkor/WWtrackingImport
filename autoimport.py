@@ -19,11 +19,10 @@ global orders
 import pyodbc
 import pandas as pd
 import re
-import smtplib, ssl
+import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from email.mime.base import MIMEBase
-from email.mime.application import MIMEApplication
 from email import encoders
 
 thread_local = local()
@@ -296,7 +295,10 @@ with session as session:
         }
         df['Shipping Method'] = df['Shipping Method'].replace(shipMapping)
         print(df)
-        df.to_csv('WWAutoOrderImport' + ' ' + now + '.csv', index=False)
+        filename = 'WWAutoOrderImport' + ' ' + now + '.csv'
+        filepath = 'pdfs'
+        fullfile = os.path.join(filepath, filename)
+        df.to_csv(fullfile, index=False)
 
 
 
@@ -311,4 +313,40 @@ with session as session:
             response = session.get(api_url_proc, headers=headers)
             print(response.status_code)
 
+
+
+
+from_email = "sales@hdlusa.com"
+from_password = os.getenv('EMAIL_CRED')
+to_email = "tbarker@hdlusa.com"
+
+# Create the message
+subject = f"[AUTOMATIC] WW Order Import {now}"
+
+
+msg = MIMEMultipart()
+port = 465
+
+msg['To'] = to_email
+msg['Subject'] = subject
+msg['From'] = from_email
+
+
+# Attachment
+attachment_path = fullfile  # Provide the path to your attachment
+attachment_name = os.path.basename(attachment_path)
+with open(attachment_path, "rb") as attachment_file:
+    attachment_data = attachment_file.read()
+
+attachment = MIMEBase("application", "octet-stream")
+attachment.set_payload(attachment_data)
+encoders.encode_base64(attachment)
+attachment.add_header("Content-Disposition", f"attachment; filename={attachment_name}")
+msg.attach(attachment)
+
+with smtplib.SMTP_SSL("mail.runspot.net", port) as server:
+    server.login(from_email, from_password)
+    server.send_message(msg)
+
+print("Email sent successfully")
 
