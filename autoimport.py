@@ -20,8 +20,11 @@ import pyodbc
 import pandas as pd
 import re
 import smtplib, ssl
-from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+from email.mime.base import MIMEBase
+from email.mime.application import MIMEApplication
+from email import encoders
 
 thread_local = local()
 
@@ -307,3 +310,5 @@ with session as session:
             time.sleep(10)
             response = session.get(api_url_proc, headers=headers)
             print(response.status_code)
+
+
