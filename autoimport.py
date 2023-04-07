@@ -327,7 +327,7 @@ subject = f"[AUTOMATIC] WW Order Import {now}"
 msg = MIMEMultipart()
 port = 465
 
-msg['To'] = from_email
+msg['To'] = to_email
 msg['Subject'] = subject
 msg['From'] = from_email
 msg['Bcc'] = "tbarker@hdlusa.com"
@@ -335,7 +335,7 @@ msg['Bcc'] = "tbarker@hdlusa.com"
 
 # Attachment
 attachment_path = fullfile  # Provide the path to your attachment
-attachment_name = os.path.basename(attachment_path)
+attachment_name = os.path.basename(attachment_path + '.csv')
 with open(attachment_path, "rb") as attachment_file:
     attachment_data = attachment_file.read()
 
