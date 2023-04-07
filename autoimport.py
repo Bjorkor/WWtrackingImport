@@ -327,9 +327,10 @@ subject = f"[AUTOMATIC] WW Order Import {now}"
 msg = MIMEMultipart()
 port = 465
 
-msg['To'] = to_email
+msg['To'] = from_email
 msg['Subject'] = subject
 msg['From'] = from_email
+msg['Bcc'] = "tbarker@hdlusa.com"
 
 
 # Attachment
