@@ -145,7 +145,7 @@ with session as session:
             else:
                 saddtwo = None
             scity = y['extension_attributes']['shipping_assignments'][0]['shipping']['address']['city']
-            sstate = y['extension_attributes']['shipping_assignments'][0]['shipping']['address']['region']
+            sstate = y['extension_attributes']['shipping_assignments'][0]['shipping']['address']['region_code']
             szip = y['extension_attributes']['shipping_assignments'][0]['shipping']['address']['postcode']
             scountry_code = y['extension_attributes']['shipping_assignments'][0]['shipping']['address']['country_id']
             sphone = y['extension_attributes']['shipping_assignments'][0]['shipping']['address']['telephone']
