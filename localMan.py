@@ -102,8 +102,11 @@ def pullOrder(increment_id, traverse_id):
         # print(response.content)
         if response.status_code == 200:
             y = json.loads(response.content)
-            entity_id = y['items'][0]['entity_id']
-            order(entity_id=entity_id, increment_id=increment_id, traverse_id=traverse_id).new()
+            try:
+                entity_id = y['items'][0]['entity_id']
+                order(entity_id=entity_id, increment_id=increment_id, traverse_id=traverse_id).new()
+            except:
+                pass
         if response.status_code == 400:
             print(response.content)
         if response.status_code != 200 and response.status_code != 400:
