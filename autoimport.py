@@ -336,12 +336,12 @@ msg['Bcc'] = "tbarker@hdlusa.com"
 # Attachment
 attachment_path = fullfile  # Provide the path to your attachment
 attachment_name = os.path.basename(attachment_path + '.csv')
-with open(attachment_path, "rb") as attachment_file:
-    attachment_data = attachment_file.read()
+attachment_data = open(attachment_path, "rb")
 
-attachment = MIMEBase("application", "octet-stream")
-attachment.set_payload(attachment_data)
-encoders.encode_base64(attachment)
+
+attachment = MIMEText(attachment_data.read(), 'csv')
+attachment_data.close()
+
 attachment.add_header("Content-Disposition", f"attachment; filename={attachment_name}")
 msg.attach(attachment)
 
