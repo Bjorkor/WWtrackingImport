@@ -128,7 +128,7 @@ with session as session:
             else:
                 baddtwo = None
             ccity = y['billing_address']['city']
-            cstate = y['billing_address']['region']
+            cstate = y['billing_address']['region_code']
             czip = y['billing_address']['postcode']
             ccountry_code = y['billing_address']['country_id']
             if 'company' in y['billing_address'].keys():
