@@ -49,8 +49,8 @@ def scrape():
                 raise
     # SQL statements are executed using the Cursor execute() function.
     query = """select a.TransId, a.TrackingNum, s.[cf_External Trans Id] from tblSoShippingImport a join trav_tblSoTransHeader_view s on s.TransId = a.TransId"""
-
-    cursor.execute(query)
+    oneshot = "select TransId,ShipNum,[cf_External Trans Id],OrderDate from trav_tblArHistHeader_View where OrderDate > getdate() -14;"
+    cursor.execute(oneshot)
     # Assigns all remaining rows to a list
     rows = cursor.fetchall()
     print('pulling data...')
