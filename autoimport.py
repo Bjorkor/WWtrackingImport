@@ -261,7 +261,7 @@ with session as session:
                 else:
                     order = pd.Series(order_dict)
                     df = pd.concat([df, order.to_frame().T])
-                    
+
                     icount = icount + 1
         df = df.merge(right=pullLocal(), how='left', on='Product ID')
         df.drop('Unit_x', axis=1, inplace=True)
@@ -318,10 +318,10 @@ with session as session:
 
 from_email = "sales@hdlusa.com"
 from_password = os.getenv('EMAIL_CRED')
-to_emails = ["tbarker@hdlusa.com", "barkertylor@gmail.com"]
+to_emails = ["tbarker@hdlusa.com", "cstachowski@hdlusa.com", "BReichard@hdlusa.com"]
 
 # Create the message
-subject = f"[AUTOMATIC] WW Order Import {now}"
+subject = f"**TEST** DO NOT PROCESS **TEST** [AUTOMATIC] WW Order Import {now}"
 
 
 
