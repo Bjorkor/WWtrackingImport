@@ -321,7 +321,7 @@ from_password = os.getenv('EMAIL_CRED')
 to_emails = ["tbarker@hdlusa.com", "cstachowski@hdlusa.com", "BReichard@hdlusa.com"]
 
 # Create the message
-subject = f"**TEST** DO NOT PROCESS **TEST** [AUTOMATIC] WW Order Import {now}"
+subject = f"[AUTOMATIC] WW Order Import {now}"
 
 
 
