@@ -339,7 +339,7 @@ attachment_name = os.path.basename(attachment_path + '.csv')
 attachment_data = open(attachment_path, "rb")
 
 
-attachment = MIMEText(attachment_data.read(), 'csv')
+attachment = MIMEText(attachment_data, 'csv')
 attachment_data.close()
 
 attachment.add_header("Content-Disposition", f"attachment; filename={attachment_name}")
