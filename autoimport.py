@@ -261,7 +261,7 @@ with session as session:
                 else:
                     order = pd.Series(order_dict)
                     df = pd.concat([df, order.to_frame().T])
-                    print(sku)
+                    
                     icount = icount + 1
         df = df.merge(right=pullLocal(), how='left', on='Product ID')
         df.drop('Unit_x', axis=1, inplace=True)
@@ -318,19 +318,16 @@ with session as session:
 
 from_email = "sales@hdlusa.com"
 from_password = os.getenv('EMAIL_CRED')
-to_email = "tbarker@hdlusa.com"
+to_emails = ["tbarker@hdlusa.com", "barkertylor@gmail.com"]
 
 # Create the message
 subject = f"[AUTOMATIC] WW Order Import {now}"
 
 
-msg = MIMEMultipart()
+
 port = 465
 
-msg['To'] = to_email
-msg['Subject'] = subject
-msg['From'] = from_email
-msg['Bcc'] = "tbarker@hdlusa.com"
+
 body = "Hello, please find the attached file for the WW Order Import."
 
 
@@ -343,7 +340,7 @@ attachment_path = fullfile  # Provide the path to your attachment
 # Create a MIMEMultipart message
 msg = MIMEMultipart()
 msg["From"] = from_email
-msg["To"] = to_email
+msg["To"] = ", ".join(to_emails)
 msg["Subject"] = subject
 
 # Attach the email body
@@ -364,7 +361,7 @@ with open(attachment_path, "rb") as f:
 try:
     server = smtplib.SMTP_SSL("mail.runspot.net", 465)
     server.login(from_email, from_password)
-    server.sendmail(from_email, to_email, msg.as_string())
+    server.sendmail(from_email, to_emails, msg.as_string())
     server.quit()
     print("Email with attachment sent successfully!")
 except Exception as e:
