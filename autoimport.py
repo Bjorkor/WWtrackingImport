@@ -336,6 +336,10 @@ body = "Hello, please find the attached file for the WW Order Import."
 
 # Attachment
 attachment_path = fullfile  # Provide the path to your attachment
+
+
+
+
 # Create a MIMEMultipart message
 msg = MIMEMultipart()
 msg["From"] = from_email
@@ -358,11 +362,10 @@ with open(attachment_path, "rb") as f:
 
 # Connect to the SMTP server and send the email
 try:
-    server = smtplib.SMTP_SSL("smtp.gmail.com", 465)
+    server = smtplib.SMTP_SSL("mail.runspot.net", 465)
     server.login(from_email, from_password)
     server.sendmail(from_email, to_email, msg.as_string())
     server.quit()
     print("Email with attachment sent successfully!")
 except Exception as e:
     print(f"Error sending email: {e}")
-
