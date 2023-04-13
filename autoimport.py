@@ -331,23 +331,38 @@ msg['To'] = to_email
 msg['Subject'] = subject
 msg['From'] = from_email
 msg['Bcc'] = "tbarker@hdlusa.com"
+body = "Hello, please find the attached file for the WW Order Import."
 
 
 # Attachment
 attachment_path = fullfile  # Provide the path to your attachment
-attachment_name = os.path.basename(attachment_path + '.csv')
-attachment_data = open(attachment_path, "rb")
+# Create a MIMEMultipart message
+msg = MIMEMultipart()
+msg["From"] = from_email
+msg["To"] = to_email
+msg["Subject"] = subject
 
+# Attach the email body
+msg.attach(MIMEText(body, "plain"))
 
-attachment = MIMEText(attachment_data, 'csv')
-attachment_data.close()
+# Attach the file
+with open(attachment_path, "rb") as f:
+    part = MIMEBase("application", "octet-stream")
+    part.set_payload(f.read())
+    encoders.encode_base64(part)
+    part.add_header(
+        "Content-Disposition",
+        f"attachment; filename= {os.path.basename(attachment_path)}",
+    )
+    msg.attach(part)
 
-attachment.add_header("Content-Disposition", f"attachment; filename={attachment_name}")
-msg.attach(attachment)
-
-with smtplib.SMTP_SSL("mail.runspot.net", port) as server:
+# Connect to the SMTP server and send the email
+try:
+    server = smtplib.SMTP_SSL("smtp.gmail.com", 465)
     server.login(from_email, from_password)
-    server.send_message(msg)
-
-print("Email sent successfully")
+    server.sendmail(from_email, to_email, msg.as_string())
+    server.quit()
+    print("Email with attachment sent successfully!")
+except Exception as e:
+    print(f"Error sending email: {e}")
 
