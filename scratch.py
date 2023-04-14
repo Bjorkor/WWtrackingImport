@@ -28,4 +28,5 @@ client = pymongo.MongoClient(dbaddr)
 db = client["wwmongo"]
 orders = db["orders"]
 
-orders.drop()
+for x in orders.find():
+    print(x)
