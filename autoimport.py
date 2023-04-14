@@ -296,7 +296,7 @@ with session as session:
         df['Shipping Method'] = df['Shipping Method'].replace(shipMapping)
         print(df)
         filename = 'WWAutoOrderImport' + ' ' + now + '.csv'
-        filepath = 'pdfs'
+        filepath = '/home/ftp/WWtrackingImport/pdfs'
         fullfile = os.path.join(filepath, filename)
         df.to_csv(fullfile, index=False)
 
