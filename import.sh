@@ -1,4 +1,4 @@
-  GNU nano 4.8                                                                                                                                               run.sh
+GNU nano 4.8                                                                                                                                               run.sh
 #!/bin/bash
 
 # Author : Zara Ali
