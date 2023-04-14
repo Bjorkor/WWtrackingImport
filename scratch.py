@@ -22,13 +22,12 @@ import pandas as pd
 thread_local = local()
 import re
 
+load_dotenv()
+dbaddr = os.getenv('DBADDR')
+client = pymongo.MongoClient(dbaddr)
+db = client["wwmongo"]
+orders = db["orders"]
 
-
-df = pd.read_excel('WWMagentoTracking.xlsx')
-col = ['magento', 'track', 'traverse']
-df.fillna(value=11111111, inplace=True)
-df.columns = col
-for index, row in df.iterrows():
-    pullOrder(row['magento'], row['traverse'])
-    order(increment_id=row['magento']).update('tracking', str(row['track']))
-pushTracks()
+order_numbers = [2000310276, 2000310450, 2000310450, 2000310426, 2000310426, 2000310462, 2000310462, 2000310183, 2000310183, 2000310465]
+for x in order_numbers:
+    print(orders.find_one({"traverse_id": x}))
