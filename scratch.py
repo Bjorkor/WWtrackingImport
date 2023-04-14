@@ -28,6 +28,4 @@ client = pymongo.MongoClient(dbaddr)
 db = client["wwmongo"]
 orders = db["orders"]
 
-order_numbers = [2000310276, 2000310450, 2000310450, 2000310426, 2000310426, 2000310462, 2000310462, 2000310183, 2000310183, 2000310465]
-for x in order_numbers:
-    print(orders.delete_one({"traverse_id": x}))
+orders.drop()
