@@ -1,6 +1,17 @@
+#!/bin/sh
 
+# Set the path to your virtual environment directory
+VENV_DIR="/home/ftp/WWtrackingImport/venv"
 
-echo 'pulling source'
-activate="/home/ftp/WWtrackingImport/venv/bin/activate"
-source "$activate"
-python /home/ftp/WWtrackingImport/app.py
+# Set the path to your Python script
+PYTHON_SCRIPT="/home/ftp/WWtrackingImport/app.py"
+
+# Activate the virtual environment
+. "$VENV_DIR/bin/activate"
+
+# Execute the Python script
+python "$PYTHON_SCRIPT"
+
+# Deactivate the virtual environment
+deactivate
+
