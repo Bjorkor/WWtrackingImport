@@ -29,4 +29,4 @@ db = client["wwmongo"]
 orders = db["orders"]
 
 for x in orders.find():
-    print(x['_id'])
+    order(increment_id=x).track()
