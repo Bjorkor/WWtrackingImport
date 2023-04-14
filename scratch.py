@@ -29,4 +29,4 @@ db = client["wwmongo"]
 orders = db["orders"]
 
 for x in orders.find():
-    print(x)
+    print(x['_id'])
