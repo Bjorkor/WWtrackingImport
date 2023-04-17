@@ -17,7 +17,7 @@ python "$PYTHON_SCRIPT"
 
 
 # check for success
-if [ $? == 0 ]
+if [ $? = 0 ]
 then
         # if success, report success to cronitor
         curl https://cronitor.link/p/e12853e7180849b99497cbf55f5b8859/kTj0MO?state=complete
