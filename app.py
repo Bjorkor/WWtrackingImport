@@ -30,8 +30,7 @@ orders = db["orders"]
 try:
     localMan.scrape()
     localMan.pushTracks()
-    for x in orders.find():
-        print(order(x))
+
 
 except:
     traceback.print_exc()
