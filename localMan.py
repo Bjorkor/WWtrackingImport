@@ -155,6 +155,7 @@ def pushTracks():
                 order(increment_id=increment).update('isTracked', True)
                 print(f'Pushed tracking info for order {increment} to magento')
             if response.status_code == 400:
+                print(f'order {increment} has an error')
                 print(response.content)
             if response.status_code != 200 and response.status_code != 400:
                 # print('FFFFFF')
