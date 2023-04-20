@@ -318,7 +318,7 @@ with session as session:
 
 from_email = "sales@hdlusa.com"
 from_password = os.getenv('EMAIL_CRED')
-to_emails = ["tbarker@hdlusa.com", "cstachowski@hdlusa.com", "BReichard@hdlusa.com", "bbeaman@hdlusa.com"]
+to_emails = ["tbarker@hdlusa.com", "cstachowski@hdlusa.com", "BReichard@hdlusa.com"]
 
 # Create the message
 subject = f"[AUTOMATIC] WW Order Import {now}"
