@@ -217,7 +217,7 @@ with session as session:
 
                 cut_list = None
                 cut_charge = None
-                if ccountry_code == 'US':
+                if ccountry_code == 'USA':
                     order_dict = {
                         'Order Number': this_order_number,
                         'Order Date': this_order_date,
