@@ -7,4 +7,5 @@ client = pymongo.MongoClient(dbaddr)
 db = client["wwmongo"]
 orders = db["orders"]
 q = { 'isTracked': True }
-orders.find(q)
+for x in orders.find(q):
+    print(x)
