@@ -7,5 +7,6 @@ client = pymongo.MongoClient(dbaddr)
 db = client["wwmongo"]
 orders = db["orders"]
 q = { 'isTracked': True }
-for x in orders.find(q):
-    print(x)
+x = orders.delete_many(q)
+
+print(x.deleted_count, " documents deleted.")
