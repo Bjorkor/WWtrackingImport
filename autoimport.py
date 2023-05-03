@@ -305,8 +305,7 @@ with session as session:
                     order_dict['Tax Rate'] = real_tax_rate
                     order_dict['Shipping Cost'] = real_shipping
                     icount = icount + 1
-                    order = pd.Series(order_dict)
-                    df = pd.concat([df, order.to_frame().T])
+
                 if order_dict['Product ID'].startswith('X'):
                     pass
                 else:
