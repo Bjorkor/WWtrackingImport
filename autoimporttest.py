@@ -305,15 +305,15 @@ with session as session:
                     order_dict['Tax Rate'] = real_tax_rate
                     order_dict['Shipping Cost'] = real_shipping
                     icount = icount + 1
-                    order = pd.Series(order_dict)
-                    df = pd.concat([df, order.to_frame().T])
+
                 if order_dict['Product ID'].startswith('X'):
                     pass
                 else:
-                    order = pd.Series(order_dict)
-                    df = pd.concat([df, order.to_frame().T])
+                    pass
+                order = pd.Series(order_dict)
+                df = pd.concat([df, order.to_frame().T])
 
-                    icount = icount + 1
+
         df = df.merge(right=pullLocal(), how='left', on='Product ID')
         df.drop('Unit_x', axis=1, inplace=True)
         df.rename(columns={'Unit_y': 'Unit'}, inplace=True)
