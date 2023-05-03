@@ -309,10 +309,10 @@ with session as session:
                 if order_dict['Product ID'].startswith('X'):
                     pass
                 else:
-                    order = pd.Series(order_dict)
-                    df = pd.concat([df, order.to_frame().T])
-
-                    icount = icount + 1
+                    pass
+                order = pd.Series(order_dict)
+                df = pd.concat([df, order.to_frame().T])
+                
         df = df.merge(right=pullLocal(), how='left', on='Product ID')
         df.drop('Unit_x', axis=1, inplace=True)
         df.rename(columns={'Unit_y': 'Unit'}, inplace=True)
