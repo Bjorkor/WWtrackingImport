@@ -11,13 +11,16 @@ from orderMan import order
 import json
 import pymongo
 import traceback
+
 global client
 global db
 global orders
 import pyodbc
 import pandas as pd
+
 thread_local = local()
 import re
+
 
 def scrape():
     server = "WIN-PBL82ADEL98.HDLUSA.LAN,49816,49816"
@@ -58,7 +61,9 @@ def scrape():
     # Close the connection
     cnxn.close()
 
-    localMansPants.rename(columns={"TransId": "traverse_id", "TrackingNum": "tracking", "cf_External Trans Id": "increment_id"}, inplace=True)
+    localMansPants.rename(
+        columns={"TransId": "traverse_id", "TrackingNum": "tracking", "cf_External Trans Id": "increment_id"},
+        inplace=True)
 
     localMansPants = localMansPants.dropna()
     localMansPants = localMansPants[localMansPants['increment_id'].apply(lambda x: len(x) == 10)]
@@ -68,21 +73,26 @@ def scrape():
         increment_id = row['increment_id']
         traverse_id = row['traverse_id']
         pullOrder(increment_id, traverse_id)
-    qq = orders.find({'isTracked': False})
-    orderMansPants = pd.DataFrame(list(qq))
-    orderMansPants = orderMansPants[['entity_id', 'increment_id', 'dateCreated', 'dateModified', 'isTracked']]
+    try:
+        qq = orders.find({'isTracked': False})
+        orderMansPants = pd.DataFrame(list(qq))
+        orderMansPants = orderMansPants[['entity_id', 'increment_id', 'dateCreated', 'dateModified', 'isTracked']]
 
-    megazord = pd.merge(left=orderMansPants, right=localMansPants, on='increment_id', how='left')
-    megazord['isTracked'] = True
-    print('pushing tracking and traverse_id to database...')
-    for index, row in megazord.iterrows():
-        entity = row['entity_id']
-        traverse_id = row['traverse_id']
-        tracking = row['tracking']
-        increment_id = row['increment_id']
+        megazord = pd.merge(left=orderMansPants, right=localMansPants, on='increment_id', how='left')
+        megazord['isTracked'] = True
+        print('pushing tracking and traverse_id to database...')
+        for index, row in megazord.iterrows():
+            entity = row['entity_id']
+            traverse_id = row['traverse_id']
+            tracking = row['tracking']
+            increment_id = row['increment_id']
 
-        order(increment_id=increment_id).update('traverse_id', traverse_id)
-        order(increment_id=increment_id).update('tracking', str(tracking))
+            order(increment_id=increment_id).update('traverse_id', traverse_id)
+            order(increment_id=increment_id).update('tracking', str(tracking))
+
+    except:
+        print('All orders in database have been tracked')
+
 
 def pullOrder(increment_id, traverse_id):
     now = datetime.datetime.utcnow()
@@ -115,6 +125,7 @@ def pullOrder(increment_id, traverse_id):
                 time.sleep(10)
                 response = session.get(api_url, headers=headers)
                 print(response.status_code)
+
 
 def pushTracks():
     j = '''{
@@ -169,7 +180,6 @@ def pushTracks():
                         count = count + 1
                     else:
                         pass
-
 
 
 def get_session() -> Session:
