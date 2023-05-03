@@ -10,7 +10,7 @@ orders = db["orders"]
 
 
 d = datetime.datetime(2023, 4, 28, 21, 46, 8, 597000)
-q = { "dateCreated": {"$lt": d}}
+q = { "isTracked": False }
 x = orders.delete_many(q)
 
 print(x.deleted_count, " documents deleted.")
