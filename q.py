@@ -6,6 +6,6 @@ dbaddr = os.getenv('DBADDR')
 client = pymongo.MongoClient(dbaddr)
 db = client["wwmongo"]
 orders = db["orders"]
-myquery = { "isTracked": True }
+myquery = { "isTracked": False }
 for x in orders.find(myquery):
     print(x)
