@@ -40,7 +40,7 @@ class order:
                 'isTracked': False}
         try:
             if orders.find_one({'entity_id': self.entity_id}):
-                print('order has already been grabbed')
+                print(f'order {self.increment_id} has already been grabbed')
                 pass
             else:
                 query = orders.insert_one(data)
