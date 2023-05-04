@@ -312,7 +312,7 @@ with session as session:
                     pass
                 order = pd.Series(order_dict)
                 df = pd.concat([df, order.to_frame().T])
-                
+
         df = df.merge(right=pullLocal(), how='left', on='Product ID')
         df.drop('Unit_x', axis=1, inplace=True)
         df.rename(columns={'Unit_y': 'Unit'}, inplace=True)
