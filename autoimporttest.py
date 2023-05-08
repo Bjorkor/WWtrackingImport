@@ -320,6 +320,8 @@ with session as session:
                                 bcount = bcount + 1
                             else:
                                 order_dict['Unit Price'] = 0
+                                order_dict['Tax Rate'] = 0
+                                order_dict['Shipping Cost'] = 0
                                 order = pd.Series(order_dict)
                                 df = pd.concat([df, order.to_frame().T])
                                 bcount = bcount + 1
