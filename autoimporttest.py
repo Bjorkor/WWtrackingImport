@@ -301,33 +301,12 @@ with session as session:
                         'Company': company,
                         'ShipAtt': att
                     }
+                if order_dict['Product ID'].startswith('X'):
+                    pass
                 if icount == 0:
                     order_dict['Tax Rate'] = real_tax_rate
                     order_dict['Shipping Cost'] = real_shipping
                     icount = icount + 1
-
-                '''if order_dict['Product ID'].startswith('X'):
-                    bcount = 0
-                    bundle = order_dict['Product ID'].split('-')
-                    for x in bundle:
-                        if x.startswith('X'):
-                            pass
-                        else:
-                            order_dict['Product ID'] = x
-                            if bcount == 0:
-                                order = pd.Series(order_dict)
-                                df = pd.concat([df, order.to_frame().T])
-                                bcount = bcount + 1
-                            else:
-                                order_dict['Unit Price'] = 0
-                                order_dict['Tax Rate'] = 0
-                                order_dict['Shipping Cost'] = 0
-                                order = pd.Series(order_dict)
-                                df = pd.concat([df, order.to_frame().T])
-                                bcount = bcount + 1'''
-
-
-
 
                 order = pd.Series(order_dict)
                 df = pd.concat([df, order.to_frame().T])
