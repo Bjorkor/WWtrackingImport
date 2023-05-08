@@ -407,6 +407,8 @@ with session as session:
                     order_dict['Shipping Cost'] = real_shipping
                     icount = icount + 1
 
+
+
                 #set the now populated dictionary to a pandas series
                 order = pd.Series(order_dict)
 

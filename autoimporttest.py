@@ -307,9 +307,9 @@ with session as session:
                     icount = icount + 1
 
                 if order_dict['Product ID'].startswith('X'):
-                    pass
-                else:
-                    pass
+                    bundle = order_dict['Product ID'].split('-')
+                    for x in bundle:
+                        print(x)
                 order = pd.Series(order_dict)
                 df = pd.concat([df, order.to_frame().T])
 
