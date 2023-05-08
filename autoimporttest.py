@@ -306,7 +306,7 @@ with session as session:
                     order_dict['Shipping Cost'] = real_shipping
                     icount = icount + 1
 
-                if order_dict['Product ID'].startswith('X'):
+                '''if order_dict['Product ID'].startswith('X'):
                     bcount = 0
                     bundle = order_dict['Product ID'].split('-')
                     for x in bundle:
@@ -324,7 +324,7 @@ with session as session:
                                 order_dict['Shipping Cost'] = 0
                                 order = pd.Series(order_dict)
                                 df = pd.concat([df, order.to_frame().T])
-                                bcount = bcount + 1
+                                bcount = bcount + 1'''
 
 
 
