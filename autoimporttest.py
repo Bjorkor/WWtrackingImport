@@ -302,7 +302,7 @@ with session as session:
                         'ShipAtt': att
                     }
                 if order_dict['Product ID'].startswith('X'):
-                    pass
+                    continue
                 if icount == 0:
                     order_dict['Tax Rate'] = real_tax_rate
                     order_dict['Shipping Cost'] = real_shipping
