@@ -400,6 +400,11 @@ with session as session:
                         'ShipAtt': att
                     }
 
+                #check if the item is a bundle part number
+                if order_dict['Product ID'].startswith('X'):
+                    #end this iteration
+                    continue
+
                 #check if the item count is zero
                 if icount == 0:
                     #if yes, set the tax and shipping rate fields to their real values, and increment the item count by 1
