@@ -265,8 +265,9 @@ with session as session:
 
             #shipping address region code (state, province)
             if 'region_code' in y['extension_attributes']['shipping_assignments'][0]['shipping']['address'].keys():
-                print('shipping region code found')
+
                 sstate = y['extension_attributes']['shipping_assignments'][0]['shipping']['address']['region_code']
+                print(f'shipping region code found: {sstate}')
             else:
                 print('shipping region code NOT found')
                 q = str(y['extension_attributes']['shipping_assignments'][0]['shipping']['address']['postcode'])[:5]
