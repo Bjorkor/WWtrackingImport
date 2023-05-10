@@ -39,7 +39,7 @@ def get_zip_info(zip_code):
     response = requests.get(url)
 
     if response.status_code == 200:
-        return response.json()
+        return json.loads(response.content)['state']
     else:
         return None
 
@@ -216,9 +216,11 @@ with session as session:
             ccity = y['billing_address']['city']
 
             #billing address region code (state, province)
-            if 'region_code' in y['billing_address']:
+            if 'region_code' in y['billing_address'].keys():
+                print('billing region code found')
                 cstate = y['billing_address']['region_code']
             else:
+                print('billing region code NOT found')
                 cstate = None
 
             #billing zip code
@@ -262,10 +264,16 @@ with session as session:
             scity = y['extension_attributes']['shipping_assignments'][0]['shipping']['address']['city']
 
             #shipping address region code (state, province)
-            if 'region_code' in y['extension_attributes']['shipping_assignments'][0]['shipping']['address']:
+            if 'region_code' in y['extension_attributes']['shipping_assignments'][0]['shipping']['address'].keys():
+
                 sstate = y['extension_attributes']['shipping_assignments'][0]['shipping']['address']['region_code']
+                print(f'shipping region code found: {sstate}')
             else:
-                sstate = get_zip_info(y['extension_attributes']['shipping_assignments'][0]['shipping']['address']['postcode'])['state']
+                print('shipping region code NOT found')
+                q = str(y['extension_attributes']['shipping_assignments'][0]['shipping']['address']['postcode'])[:5]
+                z = get_zip_info(q)
+                print(q)
+                sstate = z
 
             #shipping address zip code
             szip = y['extension_attributes']['shipping_assignments'][0]['shipping']['address']['postcode']
@@ -396,7 +404,7 @@ with session as session:
                         'Ship Address 1': saddone,
                         'Ship Address 2': saddtwo,
                         'Ship City': scity,
-                        'Ship State': None,
+                        'Ship State': sstate,
                         'Ship Zip': szip,
                         'Ship Province/Other': cstate,
                         'Ship Country': scountry_code,
