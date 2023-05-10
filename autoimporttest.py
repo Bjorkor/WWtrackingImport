@@ -216,7 +216,7 @@ with session as session:
             ccity = y['billing_address']['city']
 
             #billing address region code (state, province)
-            if 'region_code' in y['billing_address']:
+            if 'region_code' in y['billing_address'].keys():
                 cstate = y['billing_address']['region_code']
             else:
                 cstate = None
@@ -262,7 +262,7 @@ with session as session:
             scity = y['extension_attributes']['shipping_assignments'][0]['shipping']['address']['city']
 
             #shipping address region code (state, province)
-            if 'region_code' in y['extension_attributes']['shipping_assignments'][0]['shipping']['address']:
+            if 'region_code' in y['extension_attributes']['shipping_assignments'][0]['shipping']['address'].keys():
                 sstate = y['extension_attributes']['shipping_assignments'][0]['shipping']['address']['region_code']
             else:
                 q = str(y['extension_attributes']['shipping_assignments'][0]['shipping']['address']['postcode'])[:5]
