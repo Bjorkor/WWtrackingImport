@@ -239,3 +239,4 @@ s2.py
 order_invoice.pdf
 *.pdf
 .DS_Store
+scratch.py

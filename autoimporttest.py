@@ -39,7 +39,7 @@ def get_zip_info(zip_code):
     response = requests.get(url)
 
     if response.status_code == 200:
-        return json.loads(response)
+        return json.loads(response.content)
     else:
         return None
 
