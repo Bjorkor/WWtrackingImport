@@ -208,7 +208,7 @@ with session as session:
             if 'region_code' in y['billing_address']:
                 cstate = y['billing_address']['region_code']
             else:
-                pass
+                continue
 
             #billing zip code
             czip = y['billing_address']['postcode']
