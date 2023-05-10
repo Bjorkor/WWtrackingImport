@@ -7,8 +7,6 @@ import time
 import datetime
 from dotenv import load_dotenv
 import os
-#from orderMan import order
-#from orderMan import imports
 import localMan
 import json
 import pymongo
@@ -25,14 +23,28 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.base import MIMEBase
 from email import encoders
 
+#set some variables
 thread_local = local()
-
 token = os.getenv('BEARER')
 headers = {'Authorization': f'Bearer {token}'}
-headers2 = {'Authorization': f'Bearer {token}', 'Accept': 'application/pdf'}
 now = str(datetime.datetime.utcnow())
 
+
+#functions
+
+def get_zip_info(zip_code):
+    base_url = "https://www.zipcodeapi.com/rest/FokPyKZbaIf0lAHFjfGe3X5NkiGNfuZey430khU3HldnvthYpUGfbbpz30xE3udl/info.json"
+    url = f"{base_url}/{zip_code}/degrees"
+
+    response = requests.get(url)
+
+    if response.status_code == 200:
+        return response.json()
+    else:
+        return None
+
 def alpha2_to_alpha3(alpha2_code):
+    #convert 2 char country codes to 3 char country codes
     country_codes = {
         'AD': 'AND', 'AE': 'ARE', 'AF': 'AFG', 'AG': 'ATG', 'AI': 'AIA', 'AL': 'ALB', 'AM': 'ARM',
         'AO': 'AGO', 'AQ': 'ATA', 'AR': 'ARG', 'AS': 'ASM', 'AT': 'AUT', 'AU': 'AUS', 'AW': 'ABW',
@@ -82,12 +94,14 @@ def alpha2_to_alpha3(alpha2_code):
 
 
 def get_session() -> Session:
+    #use the current web session
     if not hasattr(thread_local, 'session'):
         thread_local.session = requests.Session()
     return thread_local.session
 
 
 def pullLocal():
+    #query local database, returns pandas dataframe with SKU and Unit of Measure
     server = "WIN-PBL82ADEL98.HDLUSA.LAN,49816,49816"
     database = "HDL"
     driver_name = ''
@@ -107,9 +121,6 @@ def pullLocal():
                     exit(1)
                 else:
                     raise
-            dims = """SELECT  * FROM dbo.tblSHQdims"""
-            lines = """SELECT  * FROM tblSoTransDetail"""
-            header = """SELECT  * FROM tblSoTransHeader"""
             sku_uom = """select * from openquery ([HDL-WAREHOUSE],'select MASTER_STOCKNO,MASTER_REC_UT from wlib.dbo.master')"""
             query = sku_uom
             cursor.execute(query)
@@ -123,101 +134,203 @@ def pullLocal():
             return df
 
 
+#main start
 
 
-
-
+#load variables from .env file
 load_dotenv()
+
+#connect to local mongodb instance
 dbaddr = os.getenv('DBADDR')
 client = pymongo.MongoClient(dbaddr)
 db = client["wwmongo"]
-#wwimports = db["imports"]
-variable_names = ['this_order_number', 'this_order_date', 'cfname', 'clname', 'baddone', 'baddtwo', 'ccity', 'cstate', 'czip', 'ccountry_code', 'hphone', 'this_email', 'sfname', 'slname', 'saddone', 'saddtwo', 'scity', 'sstate', 'szip', 'scountry_code', 'sphone', 'shipping', 'payment_type', 'ship_method', 'sku', 'qty', 'price', 'unit', 'tax_rate', 'promo_code', 'discount', 'comments', 'cut_list', 'cut_charge']
-header = [
-    'Order Number', 'Order Date', 'Customer Firstname', 'Customer Lastname', 'Customer Number',
-    'Address 1', 'Address 2', 'City', 'State', 'Zip', 'Province/Other', 'Country', 'Home Phone',
-    'Work Phone', 'Work Ext', 'Email', 'Ship Name', 'Ship Address 1', 'Ship Address 2', 'Ship City',
-    'Ship State', 'Ship Zip', 'Ship Province/Other', 'Ship Country', 'Ship Phone', 'Product ID',
-    'Quantity', 'Unit Price', 'Cut List', 'Cut Charge', 'Shipping Cost', 'Tax Rate',
-    'Promotion Code', 'Discount', 'Shipping Method', 'Payment Type', 'Comments', 'Company Name'
-]
+
+#Define final column titles
 header2 = ["Order Number", "Order Date", "Customer Firstname", "Customer Lastname", "Customer Number", "Address 1", "Address 2", "City", "State", "Zip", "Province/Other", "Country", "Home Phone", "Work Phone", "Work Ext", "Email", "Ship Name", "Ship Address 1", "Ship Address 2", "Ship City", "Ship State", "Ship Zip", "Ship Province/Other", "Ship Country", "Ship Phone", "Product ID", "Quantity", "Unit Price", "Unit", "Cut List", "Cut Charge", "Shipping Cost", "Tax Rate", "Promotion Code", "Discount", "Shipping Method", "Payment Type", "Comments", "Company", "RepId", "ShipAtt"]
 
-#imports(Order_Number=1, Order_Date=datetime.datetime.utcnow()).imports()
+#Create empty dataframe using above headers
 df = pd.DataFrame(columns=header2)
+
+#Create empty dataframe using entity and order number as headings
 entdf = pd.DataFrame(columns=['entity', 'order number'])
-units = pullLocal()
+
+#no idea what's happening here
+#units = pullLocal()
+
+#get the current web session and set it to session variable
 session = get_session()
+
+#open connection using session
 with session as session:
-    api_url = 'https://wwhardware.com/rest/default/V1/orders?searchCriteria[pageSize]=1&searchCriteria[filterGroups][0][filters][0][field]=increment_id&searchCriteria[filterGroups][0][filters][0][value]=2000307418'
+
+    #url for magento api orders endpoint
     api_url_proc = 'https://wwhardware.com/rest/default/V1/orders?searchCriteria[pageSize]=1000&searchCriteria[filterGroups][0][filters][0][field]=status&searchCriteria[filterGroups][0][filters][0][value]=processing'
 
 
-
+    #send a GET request to api_url_proc using secure headers
     response = session.get(api_url_proc, headers=headers)
-    # print(response.status_code)
-    # print(response.content)
-    if response.status_code == 200:
-        yres = json.loads(response.content)
-        #print(response.content)
 
+    #if response is GOOD, do stuff
+    if response.status_code == 200:
+        #set content of response to a variable
+        yres = json.loads(response.content)
+
+        #for each ORDER in the batch
         for y in yres['items']:
+            print(y['increment_id'])
+            #set variables
+
+            #hidden magento order ID
             entity_id = y['entity_id']
+
+            #public magento order ID
             this_order_number = y['increment_id']
-            entd = {'entity': entity_id, 'order number': this_order_number}
+
+            #what?
+            """entd = {'entity': entity_id, 'order number': this_order_number}
             ents = pd.Series(entd)
-            entdf = pd.concat([entdf, ents.to_frame().T])
+            entdf = pd.concat([entdf, ents.to_frame().T])"""
+
+            #magento's reported order date
             this_order_date = y['created_at']
+
+            #billing first and last name
             cfname = y['billing_address']['firstname']
             clname = y['billing_address']['lastname']
+
+            #attention field is first name + last name
             att = cfname + ' ' + clname
+
+            #billing address line one
             baddone = y['billing_address']['street'][0]
+
+            #check if billing address has more than one line
             if len(y['billing_address']['street']) > 1:
+                #if yes, set line 2 to a variable
                 baddtwo = y['billing_address']['street'][1]
             else:
+                #if no, set variable to None
                 baddtwo = None
+
+            #billing address city
             ccity = y['billing_address']['city']
-            cstate = y['billing_address']['region_code']
+
+            #billing address region code (state, province)
+            if 'region_code' in y['billing_address']:
+                cstate = y['billing_address']['region_code']
+            else:
+                cstate = None
+
+            #billing zip code
             czip = y['billing_address']['postcode']
+
+            #billing country code, converted from 2 chars to 3 chars
             ccountry_code = alpha2_to_alpha3(y['billing_address']['country_id'])
+
+            #check if a company name has been provided by the customer
             if 'company' in y['billing_address'].keys():
+                #if yes, set that to a variable
                 company = y['billing_address']['company']
             else:
+                #if no, set variable to None
                 company = None
+
+            #billing address phone number
             hphone = y['billing_address']['telephone']
+
+            #billing address email
             this_email = y['billing_address']['email']
+
+            #shipping first name
             sfname = y['extension_attributes']['shipping_assignments'][0]['shipping']['address']['firstname']
+
+            #shipping last name
             slname = y['extension_attributes']['shipping_assignments'][0]['shipping']['address']['lastname']
+
+            #shipping address line one
             saddone = y['extension_attributes']['shipping_assignments'][0]['shipping']['address']['street'][0]
+
+            #check if shipping address has more than one line
             if len(y['extension_attributes']['shipping_assignments'][0]['shipping']['address']['street']) > 1:
+                #if yes set it to a variable
                 saddtwo = y['extension_attributes']['shipping_assignments'][0]['shipping']['address']['street'][1]
             else:
+                #if no, set variable to None
                 saddtwo = None
+
+            #shipping address city
             scity = y['extension_attributes']['shipping_assignments'][0]['shipping']['address']['city']
-            sstate = y['extension_attributes']['shipping_assignments'][0]['shipping']['address']['region_code']
+
+            #shipping address region code (state, province)
+            if 'region_code' in y['extension_attributes']['shipping_assignments'][0]['shipping']['address']:
+                sstate = y['extension_attributes']['shipping_assignments'][0]['shipping']['address']['region_code']
+            else:
+                sstate = get_zip_info(y['extension_attributes']['shipping_assignments'][0]['shipping']['address']['postcode'])['state']
+
+            #shipping address zip code
             szip = y['extension_attributes']['shipping_assignments'][0]['shipping']['address']['postcode']
+
+            #shipping address country code, converted from 2 chars to 3 chars
             scountry_code = alpha2_to_alpha3(y['extension_attributes']['shipping_assignments'][0]['shipping']['address']['country_id'])
+
+            #shipping address phone number
             sphone = y['extension_attributes']['shipping_assignments'][0]['shipping']['address']['telephone']
+
+            #actual shipping charged to the customer
             real_shipping = y['shipping_invoiced']
+
+            #placeholder shippng charge value for the purpose of formatting the final output
             shipping = 0
+
+            #payment method
             payment_type = y['payment']['method']
+
+            #shipping method
             ship_method = y['shipping_description']
-            #co_name = y['extension_attributes']['shipping_assignments'][0]['shipping']['address']['company']
+
+            #item count
             icount = 0
+
+            #actual tax charged to customer
             real_tax_rate = y['base_tax_invoiced']
+
+            #for each ITEM in the ORDER
             for i in y['items']:
+
+                #product ordered
                 sku = i['sku']
+
+                #quantity ordered
                 qty = i['qty_ordered']
+
+                #price of the product
                 price = i['base_price']
+
+                #product unit of measure, to be populated later
                 unit = None
+
+                #placeholder tax rate value for the purpose of formatting the final output
                 tax_rate = 0
+
+                #promo code placeholder
                 promo_code = None
+
+                #discount amount
                 discount = i['discount_invoiced']
+
+                #comments placeholder
                 comments = None
 
+                #list of cuts to make for long/irregular products
                 cut_list = None
+
+                #charge associated with above cuttings
                 cut_charge = None
+
+                #check if the order is going to the USA
                 if ccountry_code == 'USA':
+                    #if yes, use this version of the dictionary, suited to orders going to the united states
+                    #'Ship Province/Other' & 'Province/Other' are set to None, and the region codes are mapped to the 'State' fields
                     order_dict = {
                         'Order Number': this_order_number,
                         'Order Date': this_order_date,
@@ -260,6 +373,8 @@ with session as session:
                         'ShipAtt': att
                     }
                 else:
+                    #if no, use this version of the dictionary, suited for international orders
+                    #'State' & 'Ship State' are set to None, and the region codes are mapped to the 'Province/Other' fields
                     order_dict = {
                         'Order Number': this_order_number,
                         'Order Date': this_order_date,
@@ -301,22 +416,40 @@ with session as session:
                         'Company': company,
                         'ShipAtt': att
                     }
+
+                #check if the item is a bundle part number
                 if order_dict['Product ID'].startswith('X'):
+                    #end this iteration
                     continue
+
+                #check if the item count is zero
                 if icount == 0:
+                    #if yes, set the tax and shipping rate fields to their real values, and increment the item count by 1
                     order_dict['Tax Rate'] = real_tax_rate
                     order_dict['Shipping Cost'] = real_shipping
                     icount = icount + 1
 
+
+
+                #set the now populated dictionary to a pandas series
                 order = pd.Series(order_dict)
+
+                #add the series created above to the blank dataframe created at the beginning of the script
                 df = pd.concat([df, order.to_frame().T])
 
-
+        #merge orders dataframe with the unit of measure dataframe from pullLocal(), using part number as the key
         df = df.merge(right=pullLocal(), how='left', on='Product ID')
+
+        #drop extra column
         df.drop('Unit_x', axis=1, inplace=True)
+
+        #rename unit of measure column
         df.rename(columns={'Unit_y': 'Unit'}, inplace=True)
-        print(df)
+
+        #set dataframe headers to those specified by the header list
         df = df[header2]
+
+        #dictionary for mapping magento ship methods to traverse ship via codes
         shipMapping = {
             'Ground': 'R02R',
             '3 Day Select': 'U21',
@@ -342,18 +475,26 @@ with session as session:
             'Priority Overnight': 'F01',
             '2nd Day': 'F11',
         }
+
+        #replace magento ship methods using above mapping
         df['Shipping Method'] = df['Shipping Method'].replace(shipMapping)
-        print(df)
+
+
+        #set name and path of output file using datetime at runtime
         filename = 'WWAutoOrderImport' + ' ' + now + '.csv'
         filepath = '/home/ftp/WWtrackingImport/pdfs'
         fullfile = os.path.join(filepath, filename)
+
+        #write final output to csv
         df.to_csv(fullfile, index=False)
 
 
 
-
+    #if response is BAD, print why
     if response.status_code == 400:
         print(response.content)
+
+    #if response is inconclusive, retry
     if response.status_code != 200 and response.status_code != 400:
         # print('FFFFFF')
         while response.status_code != 200 and response.status_code != 400:
@@ -364,6 +505,7 @@ with session as session:
 
 
 
+#setup email message
 
 from_email = "sales@hdlusa.com"
 from_password = os.getenv('EMAIL_CRED')
@@ -381,7 +523,7 @@ body = "Hello, please find the attached file for the WW Order Import."
 
 
 # Attachment
-attachment_path = fullfile  # Provide the path to your attachment
+attachment_path = fullfile
 
 
 

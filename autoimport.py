@@ -32,6 +32,17 @@ now = str(datetime.datetime.utcnow())
 
 #functions
 
+def get_zip_info(zip_code):
+    base_url = "https://www.zipcodeapi.com/rest/FokPyKZbaIf0lAHFjfGe3X5NkiGNfuZey430khU3HldnvthYpUGfbbpz30xE3udl/info.json"
+    url = f"{base_url}/{zip_code}/degrees"
+
+    response = requests.get(url)
+
+    if response.status_code == 200:
+        return response.json()
+    else:
+        return None
+
 def alpha2_to_alpha3(alpha2_code):
     #convert 2 char country codes to 3 char country codes
     country_codes = {
@@ -208,7 +219,7 @@ with session as session:
             if 'region_code' in y['billing_address']:
                 cstate = y['billing_address']['region_code']
             else:
-                continue
+                cstate = None
 
             #billing zip code
             czip = y['billing_address']['postcode']
@@ -251,7 +262,10 @@ with session as session:
             scity = y['extension_attributes']['shipping_assignments'][0]['shipping']['address']['city']
 
             #shipping address region code (state, province)
-            sstate = y['extension_attributes']['shipping_assignments'][0]['shipping']['address']['region_code']
+            if 'region_code' in y['extension_attributes']['shipping_assignments'][0]['shipping']['address']:
+                sstate = y['extension_attributes']['shipping_assignments'][0]['shipping']['address']['region_code']
+            else:
+                sstate = get_zip_info(y['extension_attributes']['shipping_assignments'][0]['shipping']['address']['postcode'])['state']
 
             #shipping address zip code
             szip = y['extension_attributes']['shipping_assignments'][0]['shipping']['address']['postcode']
