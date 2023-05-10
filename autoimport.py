@@ -205,7 +205,7 @@ with session as session:
             ccity = y['billing_address']['city']
 
             #billing address region code (state, province)
-            if y['billing_address']['region_code']:
+            if 'region_code' in y['billing_address']:
                 cstate = y['billing_address']['region_code']
             else:
                 pass
