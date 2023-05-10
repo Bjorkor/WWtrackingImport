@@ -34,4 +34,4 @@ def get_zip_info(zip_code):
         return None
 
 
-print(get_zip_info(56303))
+print(get_zip_info(56303)['state'])
