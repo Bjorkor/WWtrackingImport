@@ -22,11 +22,16 @@ import pandas as pd
 thread_local = local()
 import re
 
-load_dotenv()
-dbaddr = os.getenv('DBADDR')
-client = pymongo.MongoClient(dbaddr)
-db = client["wwmongo"]
-orders = db["orders"]
+def get_zip_info(zip_code):
+    base_url = "https://www.zipcodeapi.com/rest/FokPyKZbaIf0lAHFjfGe3X5NkiGNfuZey430khU3HldnvthYpUGfbbpz30xE3udl/info.json"
+    url = f"{base_url}/{zip_code}/degrees"
 
-for x in orders.find():
-    order(increment_id=x).track()
+    response = requests.get(url)
+
+    if response.status_code == 200:
+        return json.loads(response.content)
+    else:
+        return None
+
+
+print(get_zip_info(56303))
