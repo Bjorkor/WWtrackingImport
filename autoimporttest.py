@@ -404,7 +404,7 @@ with session as session:
                         'Ship Address 1': saddone,
                         'Ship Address 2': saddtwo,
                         'Ship City': scity,
-                        'Ship State': None,
+                        'Ship State': sstate,
                         'Ship Zip': szip,
                         'Ship Province/Other': cstate,
                         'Ship Country': scountry_code,
