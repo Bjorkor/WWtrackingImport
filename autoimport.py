@@ -166,7 +166,7 @@ with session as session:
 
         #for each ORDER in the batch
         for y in yres['items']:
-
+            print(y)
             #set variables
 
             #hidden magento order ID
