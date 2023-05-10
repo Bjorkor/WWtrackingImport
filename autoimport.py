@@ -205,7 +205,10 @@ with session as session:
             ccity = y['billing_address']['city']
 
             #billing address region code (state, province)
-            cstate = y['billing_address']['region_code']
+            if y['billing_address']['region_code']:
+                cstate = y['billing_address']['region_code']
+            else:
+                pass
 
             #billing zip code
             czip = y['billing_address']['postcode']
