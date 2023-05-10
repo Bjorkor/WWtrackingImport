@@ -39,7 +39,7 @@ def get_zip_info(zip_code):
     response = requests.get(url)
 
     if response.status_code == 200:
-        return json.loads(response.content)
+        return json.loads(response.content)['state']
     else:
         return None
 
@@ -268,7 +268,7 @@ with session as session:
                 q = str(y['extension_attributes']['shipping_assignments'][0]['shipping']['address']['postcode'])[:5]
                 z = get_zip_info(q)
                 print(q)
-                sstate = z['state']
+                sstate = z
 
             #shipping address zip code
             szip = y['extension_attributes']['shipping_assignments'][0]['shipping']['address']['postcode']
