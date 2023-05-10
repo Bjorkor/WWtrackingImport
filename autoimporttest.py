@@ -265,7 +265,7 @@ with session as session:
             if 'region_code' in y['extension_attributes']['shipping_assignments'][0]['shipping']['address']:
                 sstate = y['extension_attributes']['shipping_assignments'][0]['shipping']['address']['region_code']
             else:
-                z = get_zip_info(y['extension_attributes']['shipping_assignments'][0]['shipping']['address']['postcode'][:5])
+                z = get_zip_info(str(y['extension_attributes']['shipping_assignments'][0]['shipping']['address']['postcode'])[:5])
                 print(z)
                 sstate = z['state']
 
