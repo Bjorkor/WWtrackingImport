@@ -482,6 +482,7 @@ with session as session:
             'UPS 2nd Day Air®': 'U07',
             'Priority Overnight': 'F01',
             '2nd Day': 'F11',
+            'Standard Overnight': 'F06'
         }
 
         #replace magento ship methods using above mapping
