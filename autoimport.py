@@ -34,7 +34,7 @@ now = str(datetime.datetime.utcnow())
 
 def recallLastOrder():
     try:
-        with open('lastorder', 'w') as f:
+        with open('lastorder', 'r') as f:
             content = f.read()
         return int(content)
     except:
@@ -508,9 +508,12 @@ with session as session:
         filepath = '/home/ftp/WWtrackingImport/pdfs'
         fullfile = os.path.join(filepath, filename)
 
-        """df = df[df['Order Number'] > recallLastOrder()]
+        df.to_csv(f'/home/importbackups/FULL{filename}', index=False)
 
-        saveLastOrder(df.iloc[-1]['Order Number'])"""
+        df['Order Number'] = df['Order Number'].astype(int)
+        df = df[df['Order Number'] > recallLastOrder()]
+
+        saveLastOrder(str(df.iloc[-1]['Order Number']))
 
         #write final output to csv
         df.to_csv(fullfile, index=False)
