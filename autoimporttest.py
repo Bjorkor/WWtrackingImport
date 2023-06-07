@@ -511,7 +511,7 @@ with session as session:
         df['Order Number'] = df['Order Number'].astype(int)
         df = df[df['Order Number'] > recallLastOrder()]
 
-        saveLastOrder(df.iloc[-1]['Order Number'])
+        saveLastOrder(str(df.iloc[-1]['Order Number']))
 
         # write final output to csv
         df.to_csv(fullfile, index=False)
