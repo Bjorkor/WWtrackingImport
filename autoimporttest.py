@@ -493,7 +493,7 @@ with session as session:
         filepath = '/home/ftp/WWtrackingImport/pdfs'
         fullfile = os.path.join(filepath, filename)
 
-        print(df.tail(1)['Order Number'])
+        print(df.df.iloc[-1]['Order Number'])
 
         #write final output to csv
         df.to_csv(fullfile, index=False)
