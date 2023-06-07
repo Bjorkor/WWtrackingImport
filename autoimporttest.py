@@ -32,6 +32,11 @@ now = str(datetime.datetime.utcnow())
 
 #functions
 
+
+def saveLastOrder(string):
+    with open('lastorder', 'w') as f:
+        f.write(string)
+
 def get_zip_info(zip_code):
     base_url = "https://www.zipcodeapi.com/rest/FokPyKZbaIf0lAHFjfGe3X5NkiGNfuZey430khU3HldnvthYpUGfbbpz30xE3udl/info.json"
     url = f"{base_url}/{zip_code}/degrees"
@@ -493,7 +498,7 @@ with session as session:
         filepath = '/home/ftp/WWtrackingImport/pdfs'
         fullfile = os.path.join(filepath, filename)
 
-        print(df.iloc[-1]['Order Number'])
+        saveLastOrder(df.iloc[-1]['Order Number'])
 
         #write final output to csv
         df.to_csv(fullfile, index=False)
