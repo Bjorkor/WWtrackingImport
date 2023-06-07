@@ -508,9 +508,9 @@ with session as session:
         filepath = '/home/ftp/WWtrackingImport/pdfs'
         fullfile = os.path.join(filepath, filename)
 
-        df = df[df['Order Number'] > recallLastOrder()]
+        """df = df[df['Order Number'] > recallLastOrder()]
 
-        saveLastOrder(df.iloc[-1]['Order Number'])
+        saveLastOrder(df.iloc[-1]['Order Number'])"""
 
         #write final output to csv
         df.to_csv(fullfile, index=False)
