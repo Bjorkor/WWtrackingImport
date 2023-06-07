@@ -37,7 +37,7 @@ def recallLastOrder():
     try:
         with open('lastorder', 'w') as f:
             content = f.read()
-        return content
+        return int(content)
     except:
         return 0
 
@@ -508,6 +508,7 @@ with session as session:
         filepath = '/home/ftp/WWtrackingImport/pdfs'
         fullfile = os.path.join(filepath, filename)
 
+        df['Order Number'] = df['Order Number'].astype(int)
         df = df[df['Order Number'] > recallLastOrder()]
 
         saveLastOrder(df.iloc[-1]['Order Number'])
