@@ -34,12 +34,10 @@ now = str(datetime.datetime.utcnow())
 # functions
 
 def recallLastOrder():
-    try:
-        with open('lastorder', 'w') as f:
-            content = f.read()
-        return int(content)
-    except:
-        return 0
+    with open('lastorder', 'w') as f:
+        content = f.read()
+    return int(content)
+
 
 
 def saveLastOrder(string):
