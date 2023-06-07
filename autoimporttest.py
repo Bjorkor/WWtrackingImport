@@ -509,6 +509,8 @@ with session as session:
         filepath = '/home/ftp/WWtrackingImport/pdfs'
         fullfile = os.path.join(filepath, filename)
 
+        df.to_csv(f'/home/importbackups/FULL{filename}', index=False)
+
         df['Order Number'] = df['Order Number'].astype(int)
         df = df[df['Order Number'] > recallLastOrder()]
 
