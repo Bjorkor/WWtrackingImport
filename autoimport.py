@@ -34,15 +34,16 @@ now = str(datetime.datetime.utcnow())
 
 def recallLastOrder():
     try:
-        with open('lastorder', 'r') as f:
+        with open('lastordertest', 'r') as f:
             content = f.read()
-        return int(content)
+
+        return content
     except:
         return 0
 
 
 def saveLastOrder(string):
-    with open('lastorder', 'w') as f:
+    with open('lastordertest', 'w') as f:
         f.write(string)
 
 
@@ -510,10 +511,13 @@ with session as session:
 
         df.to_csv(f'/home/importbackups/FULL{filename}', index=False)
 
-        df['Order Number'] = df['Order Number'].astype(int)
-        df = df[df['Order Number'] > recallLastOrder()]
 
-        saveLastOrder(str(df.iloc[-1]['Order Number']))
+        try:
+            df = df[df['Order Date'] > recallLastOrder()]
+        except:
+            pass
+
+        saveLastOrder(str(df.iloc[-1]['Order Date']))
 
         #write final output to csv
         df.to_csv(fullfile, index=False)
