@@ -36,8 +36,8 @@ def recallLastOrder():
     try:
         with open('lastordertest', 'r') as f:
             content = f.read()
-            print(f'content type is: {type(content)}')
-        return int(content)
+
+        return content
     except:
         return 0
 
@@ -512,7 +512,10 @@ with session as session:
         df.to_csv(f'/home/importbackups/FULL{filename}', index=False)
 
         #df['Order Number'] = df['Order Number'].astype(int)
-        df = df[df['Order Date'] > recallLastOrder()]
+        try:
+            df = df[df['Order Date'] > recallLastOrder()]
+        except:
+            pass
 
         saveLastOrder(str(df.iloc[-1]['Order Date']))
 
