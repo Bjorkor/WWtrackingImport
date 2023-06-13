@@ -11,7 +11,6 @@ import localMan
 import json
 import pymongo
 import traceback
-
 global client
 global db
 global orders
@@ -24,27 +23,26 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.base import MIMEBase
 from email import encoders
 
-# set some variables
+#set some variables
 thread_local = local()
 token = os.getenv('BEARER')
 headers = {'Authorization': f'Bearer {token}'}
 now = str(datetime.datetime.utcnow())
 
 
-# functions
+#functions
 
 def recallLastOrder():
     try:
-        with open('lastorder', 'r') as f:
+        with open('lastordertest', 'r') as f:
             content = f.read()
-        return int(content)
+        return content
     except:
         return 0
 
 
-
 def saveLastOrder(string):
-    with open('lastorder', 'w') as f:
+    with open('lastordertest', 'w') as f:
         f.write(string)
 
 
@@ -59,9 +57,8 @@ def get_zip_info(zip_code):
     else:
         return None
 
-
 def alpha2_to_alpha3(alpha2_code):
-    # convert 2 char country codes to 3 char country codes
+    #convert 2 char country codes to 3 char country codes
     country_codes = {
         'AD': 'AND', 'AE': 'ARE', 'AF': 'AFG', 'AG': 'ATG', 'AI': 'AIA', 'AL': 'ALB', 'AM': 'ARM',
         'AO': 'AGO', 'AQ': 'ATA', 'AR': 'ARG', 'AS': 'ASM', 'AT': 'AUT', 'AU': 'AUS', 'AW': 'ABW',
@@ -96,9 +93,9 @@ def alpha2_to_alpha3(alpha2_code):
         'SX': 'SXM', 'SY': 'SYR', 'SZ': 'SWZ', 'TC': 'TCA', 'TD': 'TCD', 'TF': 'ATF', 'TG': 'TGO',
         'TH': 'THA', 'TJ': 'TJK', 'TK': 'TKL', 'TL': 'TLS', 'TM': 'TKM', 'TN': 'TUN', 'TO': 'TON',
         'TR': 'TUR', 'TT': 'TTO', 'TV': 'TUV', 'TW': 'TWN', 'TZ': 'TZA', 'UA': 'UKR', 'UG': 'UGA',
-        'UM': 'UMI', 'US': 'USA', 'UY': 'URY', 'UZ': 'UZB', 'VA': 'VAT', 'VC': 'VCT', 'VE': 'VEN',
+        'UM': 'UMI','US': 'USA', 'UY': 'URY', 'UZ': 'UZB', 'VA': 'VAT', 'VC': 'VCT', 'VE': 'VEN',
         'VG': 'VGB', 'VI': 'VIR', 'VN': 'VNM', 'VU': 'VUT', 'WF': 'WLF', 'WS': 'WSM', 'YE': 'YEM',
-        'YT': 'MYT', 'ZA': 'ZAF', 'ZM': 'ZMB', 'ZW': 'ZWE'}
+        'YT': 'MYT','ZA': 'ZAF', 'ZM': 'ZMB', 'ZW': 'ZWE'}
 
     alpha3_code = country_codes.get(alpha2_code.upper(), None)
 
@@ -108,15 +105,17 @@ def alpha2_to_alpha3(alpha2_code):
     return alpha3_code
 
 
+
+
 def get_session() -> Session:
-    # use the current web session
+    #use the current web session
     if not hasattr(thread_local, 'session'):
         thread_local.session = requests.Session()
     return thread_local.session
 
 
 def pullLocal():
-    # query local database, returns pandas dataframe with SKU and Unit of Measure
+    #query local database, returns pandas dataframe with SKU and Unit of Measure
     server = "WIN-PBL82ADEL98.HDLUSA.LAN,49816,49816"
     database = "HDL"
     driver_name = ''
@@ -149,91 +148,88 @@ def pullLocal():
             return df
 
 
-# main start
+#main start
 
 
-# load variables from .env file
+#load variables from .env file
 load_dotenv()
 
-# connect to local mongodb instance
+#connect to local mongodb instance
 dbaddr = os.getenv('DBADDR')
 client = pymongo.MongoClient(dbaddr)
 db = client["wwmongo"]
 
-# Define final column titles
-header2 = ["Order Number", "Order Date", "Customer Firstname", "Customer Lastname", "Customer Number", "Address 1",
-           "Address 2", "City", "State", "Zip", "Province/Other", "Country", "Home Phone", "Work Phone", "Work Ext",
-           "Email", "Ship Name", "Ship Address 1", "Ship Address 2", "Ship City", "Ship State", "Ship Zip",
-           "Ship Province/Other", "Ship Country", "Ship Phone", "Product ID", "Quantity", "Unit Price", "Unit",
-           "Cut List", "Cut Charge", "Shipping Cost", "Tax Rate", "Promotion Code", "Discount", "Shipping Method",
-           "Payment Type", "Comments", "Company", "RepId", "ShipAtt"]
+#Define final column titles
+header2 = ["Order Number", "Order Date", "Customer Firstname", "Customer Lastname", "Customer Number", "Address 1", "Address 2", "City", "State", "Zip", "Province/Other", "Country", "Home Phone", "Work Phone", "Work Ext", "Email", "Ship Name", "Ship Address 1", "Ship Address 2", "Ship City", "Ship State", "Ship Zip", "Ship Province/Other", "Ship Country", "Ship Phone", "Product ID", "Quantity", "Unit Price", "Unit", "Cut List", "Cut Charge", "Shipping Cost", "Tax Rate", "Promotion Code", "Discount", "Shipping Method", "Payment Type", "Comments", "Company", "RepId", "ShipAtt"]
 
-# Create empty dataframe using above headers
+#Create empty dataframe using above headers
 df = pd.DataFrame(columns=header2)
 
-# Create empty dataframe using entity and order number as headings
+#Create empty dataframe using entity and order number as headings
 entdf = pd.DataFrame(columns=['entity', 'order number'])
 
-# no idea what's happening here
-# units = pullLocal()
+#no idea what's happening here
+#units = pullLocal()
 
-# get the current web session and set it to session variable
+#get the current web session and set it to session variable
 session = get_session()
 
-# open connection using session
+#open connection using session
 with session as session:
-    # url for magento api orders endpoint
+
+    #url for magento api orders endpoint
     api_url_proc = 'https://wwhardware.com/rest/default/V1/orders?searchCriteria[pageSize]=1000&searchCriteria[filterGroups][0][filters][0][field]=status&searchCriteria[filterGroups][0][filters][0][value]=processing'
 
-    # send a GET request to api_url_proc using secure headers
+
+    #send a GET request to api_url_proc using secure headers
     response = session.get(api_url_proc, headers=headers)
 
-    # if response is GOOD, do stuff
+    #if response is GOOD, do stuff
     if response.status_code == 200:
-        # set content of response to a variable
+        #set content of response to a variable
         yres = json.loads(response.content)
 
-        # for each ORDER in the batch
+        #for each ORDER in the batch
         for y in yres['items']:
             print(y['increment_id'])
-            # set variables
+            #set variables
 
-            # hidden magento order ID
+            #hidden magento order ID
             entity_id = y['entity_id']
 
-            # public magento order ID
+            #public magento order ID
             this_order_number = y['increment_id']
 
-            # what?
+            #what?
             """entd = {'entity': entity_id, 'order number': this_order_number}
             ents = pd.Series(entd)
             entdf = pd.concat([entdf, ents.to_frame().T])"""
 
-            # magento's reported order date
+            #magento's reported order date
             this_order_date = y['created_at']
 
-            # billing first and last name
+            #billing first and last name
             cfname = y['billing_address']['firstname']
             clname = y['billing_address']['lastname']
 
-            # attention field is first name + last name
+            #attention field is first name + last name
             att = cfname + ' ' + clname
 
-            # billing address line one
+            #billing address line one
             baddone = y['billing_address']['street'][0]
 
-            # check if billing address has more than one line
+            #check if billing address has more than one line
             if len(y['billing_address']['street']) > 1:
-                # if yes, set line 2 to a variable
+                #if yes, set line 2 to a variable
                 baddtwo = y['billing_address']['street'][1]
             else:
-                # if no, set variable to None
+                #if no, set variable to None
                 baddtwo = None
 
-            # billing address city
+            #billing address city
             ccity = y['billing_address']['city']
 
-            # billing address region code (state, province)
+            #billing address region code (state, province)
             if 'region_code' in y['billing_address'].keys():
                 print('billing region code found')
                 cstate = y['billing_address']['region_code']
@@ -241,47 +237,47 @@ with session as session:
                 print('billing region code NOT found')
                 cstate = None
 
-            # billing zip code
+            #billing zip code
             czip = y['billing_address']['postcode']
 
-            # billing country code, converted from 2 chars to 3 chars
+            #billing country code, converted from 2 chars to 3 chars
             ccountry_code = alpha2_to_alpha3(y['billing_address']['country_id'])
 
-            # check if a company name has been provided by the customer
+            #check if a company name has been provided by the customer
             if 'company' in y['billing_address'].keys():
-                # if yes, set that to a variable
+                #if yes, set that to a variable
                 company = y['billing_address']['company']
             else:
-                # if no, set variable to None
+                #if no, set variable to None
                 company = None
 
-            # billing address phone number
+            #billing address phone number
             hphone = y['billing_address']['telephone']
 
-            # billing address email
+            #billing address email
             this_email = y['billing_address']['email']
 
-            # shipping first name
+            #shipping first name
             sfname = y['extension_attributes']['shipping_assignments'][0]['shipping']['address']['firstname']
 
-            # shipping last name
+            #shipping last name
             slname = y['extension_attributes']['shipping_assignments'][0]['shipping']['address']['lastname']
 
-            # shipping address line one
+            #shipping address line one
             saddone = y['extension_attributes']['shipping_assignments'][0]['shipping']['address']['street'][0]
 
-            # check if shipping address has more than one line
+            #check if shipping address has more than one line
             if len(y['extension_attributes']['shipping_assignments'][0]['shipping']['address']['street']) > 1:
-                # if yes set it to a variable
+                #if yes set it to a variable
                 saddtwo = y['extension_attributes']['shipping_assignments'][0]['shipping']['address']['street'][1]
             else:
-                # if no, set variable to None
+                #if no, set variable to None
                 saddtwo = None
 
-            # shipping address city
+            #shipping address city
             scity = y['extension_attributes']['shipping_assignments'][0]['shipping']['address']['city']
 
-            # shipping address region code (state, province)
+            #shipping address region code (state, province)
             if 'region_code' in y['extension_attributes']['shipping_assignments'][0]['shipping']['address'].keys():
 
                 sstate = y['extension_attributes']['shipping_assignments'][0]['shipping']['address']['region_code']
@@ -293,71 +289,70 @@ with session as session:
                 print(q)
                 sstate = z
 
-            # shipping address zip code
+            #shipping address zip code
             szip = y['extension_attributes']['shipping_assignments'][0]['shipping']['address']['postcode']
 
-            # shipping address country code, converted from 2 chars to 3 chars
-            scountry_code = alpha2_to_alpha3(
-                y['extension_attributes']['shipping_assignments'][0]['shipping']['address']['country_id'])
+            #shipping address country code, converted from 2 chars to 3 chars
+            scountry_code = alpha2_to_alpha3(y['extension_attributes']['shipping_assignments'][0]['shipping']['address']['country_id'])
 
-            # shipping address phone number
+            #shipping address phone number
             sphone = y['extension_attributes']['shipping_assignments'][0]['shipping']['address']['telephone']
 
-            # actual shipping charged to the customer
+            #actual shipping charged to the customer
             real_shipping = y['shipping_invoiced']
 
-            # placeholder shippng charge value for the purpose of formatting the final output
+            #placeholder shippng charge value for the purpose of formatting the final output
             shipping = 0
 
-            # payment method
+            #payment method
             payment_type = y['payment']['method']
 
-            # shipping method
+            #shipping method
             ship_method = y['shipping_description']
 
-            # item count
+            #item count
             icount = 0
 
-            # actual tax charged to customer
+            #actual tax charged to customer
             real_tax_rate = y['base_tax_invoiced']
 
-            # for each ITEM in the ORDER
+            #for each ITEM in the ORDER
             for i in y['items']:
 
-                # product ordered
+                #product ordered
                 sku = i['sku']
 
-                # quantity ordered
+                #quantity ordered
                 qty = i['qty_ordered']
 
-                # price of the product
+                #price of the product
                 price = i['base_price']
 
-                # product unit of measure, to be populated later
+                #product unit of measure, to be populated later
                 unit = None
 
-                # placeholder tax rate value for the purpose of formatting the final output
+                #placeholder tax rate value for the purpose of formatting the final output
                 tax_rate = 0
 
-                # promo code placeholder
+                #promo code placeholder
                 promo_code = None
 
-                # discount amount
+                #discount amount
                 discount = i['discount_invoiced']
 
-                # comments placeholder
+                #comments placeholder
                 comments = None
 
-                # list of cuts to make for long/irregular products
+                #list of cuts to make for long/irregular products
                 cut_list = None
 
-                # charge associated with above cuttings
+                #charge associated with above cuttings
                 cut_charge = None
 
-                # check if the order is going to the USA
+                #check if the order is going to the USA
                 if ccountry_code == 'USA':
-                    # if yes, use this version of the dictionary, suited to orders going to the united states
-                    # 'Ship Province/Other' & 'Province/Other' are set to None, and the region codes are mapped to the 'State' fields
+                    #if yes, use this version of the dictionary, suited to orders going to the united states
+                    #'Ship Province/Other' & 'Province/Other' are set to None, and the region codes are mapped to the 'State' fields
                     order_dict = {
                         'Order Number': this_order_number,
                         'Order Date': this_order_date,
@@ -400,8 +395,8 @@ with session as session:
                         'ShipAtt': att
                     }
                 else:
-                    # if no, use this version of the dictionary, suited for international orders
-                    # 'State' & 'Ship State' are set to None, and the region codes are mapped to the 'Province/Other' fields
+                    #if no, use this version of the dictionary, suited for international orders
+                    #'State' & 'Ship State' are set to None, and the region codes are mapped to the 'Province/Other' fields
                     order_dict = {
                         'Order Number': this_order_number,
                         'Order Date': this_order_date,
@@ -444,37 +439,39 @@ with session as session:
                         'ShipAtt': att
                     }
 
-                # check if the item is a bundle part number
+                #check if the item is a bundle part number
                 if order_dict['Product ID'].startswith('X'):
-                    # end this iteration
+                    #end this iteration
                     continue
 
-                # check if the item count is zero
+                #check if the item count is zero
                 if icount == 0:
-                    # if yes, set the tax and shipping rate fields to their real values, and increment the item count by 1
+                    #if yes, set the tax and shipping rate fields to their real values, and increment the item count by 1
                     order_dict['Tax Rate'] = real_tax_rate
                     order_dict['Shipping Cost'] = real_shipping
                     icount = icount + 1
 
-                # set the now populated dictionary to a pandas series
+
+
+                #set the now populated dictionary to a pandas series
                 order = pd.Series(order_dict)
 
-                # add the series created above to the blank dataframe created at the beginning of the script
+                #add the series created above to the blank dataframe created at the beginning of the script
                 df = pd.concat([df, order.to_frame().T])
 
-        # merge orders dataframe with the unit of measure dataframe from pullLocal(), using part number as the key
+        #merge orders dataframe with the unit of measure dataframe from pullLocal(), using part number as the key
         df = df.merge(right=pullLocal(), how='left', on='Product ID')
 
-        # drop extra column
+        #drop extra column
         df.drop('Unit_x', axis=1, inplace=True)
 
-        # rename unit of measure column
+        #rename unit of measure column
         df.rename(columns={'Unit_y': 'Unit'}, inplace=True)
 
-        # set dataframe headers to those specified by the header list
+        #set dataframe headers to those specified by the header list
         df = df[header2]
 
-        # dictionary for mapping magento ship methods to traverse ship via codes
+        #dictionary for mapping magento ship methods to traverse ship via codes
         shipMapping = {
             'Ground': 'R02R',
             '3 Day Select': 'U21',
@@ -499,31 +496,35 @@ with session as session:
             'UPS 2nd Day Air®': 'U07',
             'Priority Overnight': 'F01',
             '2nd Day': 'F11',
+            'Standard Overnight': 'F06'
         }
 
-        # replace magento ship methods using above mapping
+        #replace magento ship methods using above mapping
         df['Shipping Method'] = df['Shipping Method'].replace(shipMapping)
 
-        # set name and path of output file using datetime at runtime
+
+        #set name and path of output file using datetime at runtime
         filename = 'WWAutoOrderImport' + ' ' + now + '.csv'
         filepath = '/home/ftp/WWtrackingImport/pdfs'
         fullfile = os.path.join(filepath, filename)
 
         df.to_csv(f'/home/importbackups/FULL{filename}', index=False)
 
-        df['Order Number'] = df['Order Number'].astype(int)
-        df = df[df['Order Number'] > recallLastOrder()]
+        #df['Order Number'] = df['Order Number'].astype(int)
+        df = df[df['Order Date'] > recallLastOrder()]
 
-        saveLastOrder(str(df.iloc[-1]['Order Number']))
+        saveLastOrder(str(df.iloc[-1]['Order Date']))
 
-        # write final output to csv
+        #write final output to csv
         df.to_csv(fullfile, index=False)
 
-    # if response is BAD, print why
+
+
+    #if response is BAD, print why
     if response.status_code == 400:
         print(response.content)
 
-    # if response is inconclusive, retry
+    #if response is inconclusive, retry
     if response.status_code != 200 and response.status_code != 400:
         # print('FFFFFF')
         while response.status_code != 200 and response.status_code != 400:
@@ -532,7 +533,9 @@ with session as session:
             response = session.get(api_url_proc, headers=headers)
             print(response.status_code)
 
-# setup email message
+
+
+#setup email message
 
 from_email = "sales@hdlusa.com"
 from_password = os.getenv('EMAIL_CRED')
@@ -541,12 +544,19 @@ to_emails = ["tbarker@hdlusa.com"]
 # Create the message
 subject = f"[AUTOMATIC] WW Order Import {now}"
 
+
+
 port = 465
+
 
 body = "Hello, please find the attached file for the WW Order Import."
 
+
 # Attachment
 attachment_path = fullfile
+
+
+
 
 # Create a MIMEMultipart message
 msg = MIMEMultipart()
