@@ -36,6 +36,7 @@ def recallLastOrder():
     try:
         with open('lastordertest', 'r') as f:
             content = f.read()
+            print(f'content type is: {type(content)}')
         return int(content)
     except:
         return 0
