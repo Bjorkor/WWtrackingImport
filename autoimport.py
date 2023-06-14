@@ -22,6 +22,8 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from email.mime.base import MIMEBase
 from email import encoders
+import logging
+from logging.handlers import RotatingFileHandler
 
 #set some variables
 thread_local = local()
@@ -30,13 +32,42 @@ headers = {'Authorization': f'Bearer {token}'}
 now = str(datetime.datetime.utcnow())
 
 
+# Create 'logs' directory if it does not exist
+if not os.path.exists('logs'):
+    os.makedirs('logs')
+
+# Create a custom logger
+logger = logging.getLogger(__name__)
+
+# Set overall level to debug, default is warning for root logger
+logger.setLevel(logging.DEBUG)
+
+# Create handlers
+c_handler = logging.StreamHandler()
+f_handler = RotatingFileHandler('logs/import.log', maxBytes=20000000, backupCount=5)
+
+# Set levels for handlers (optional)
+c_handler.setLevel(logging.WARNING)
+f_handler.setLevel(logging.DEBUG)
+
+# Create formatters and add it to handlers
+c_format = logging.Formatter('%(name)s - %(levelname)s - %(message)s')
+f_format = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+c_handler.setFormatter(c_format)
+f_handler.setFormatter(f_format)
+
+# Add handlers to the logger
+logger.addHandler(c_handler)
+logger.addHandler(f_handler)
+
+
 #functions
 
 def recallLastOrder():
     try:
         with open('lastorder', 'r') as f:
             content = f.read()
-
+            logger.info(f"reading last order datetime from file: {content}")
         return content
     except:
         return 0
@@ -44,6 +75,7 @@ def recallLastOrder():
 
 def saveLastOrder(string):
     with open('lastorder', 'w') as f:
+        logger.info(f"saving last order datetime to file: {string}")
         f.write(string)
 
 
