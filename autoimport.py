@@ -34,7 +34,7 @@ now = str(datetime.datetime.utcnow())
 
 def recallLastOrder():
     try:
-        with open('lastordertest', 'r') as f:
+        with open('lastorder', 'r') as f:
             content = f.read()
 
         return content
@@ -43,7 +43,7 @@ def recallLastOrder():
 
 
 def saveLastOrder(string):
-    with open('lastordertest', 'w') as f:
+    with open('lastorder', 'w') as f:
         f.write(string)
 
 
