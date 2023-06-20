@@ -509,7 +509,7 @@ with session as session:
         filepath = '/home/ftp/WWtrackingImport/pdfs'
         fullfile = os.path.join(filepath, filename)
 
-        df.to_csv(f'/home/importbackups/FULL{filename}', index=False)
+        df.to_csv(f'/home/importbackups/FULL{filename}', encoding='utf-8', index=False)
 
         #df['Order Number'] = df['Order Number'].astype(int)
         try:
@@ -520,7 +520,7 @@ with session as session:
         saveLastOrder(str(df.iloc[-1]['Order Date']))
 
         #write final output to csv
-        df.to_csv(fullfile, index=False)
+        df.to_csv(fullfile, encoding='utf-8', index=False)
 
 
 
