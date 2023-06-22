@@ -535,13 +535,13 @@ with session as session:
         #replace magento ship methods using above mapping
         df['Shipping Method'] = df['Shipping Method'].replace(shipMapping)
 
-        df['Freight Acc Num'] = 123456
+
         #set name and path of output file using datetime at runtime
         filename = 'WWAutoOrderImport' + ' ' + now + '.csv'
         filepath = '/home/ftp/WWtrackingImport/pdfs'
         fullfile = os.path.join(filepath, filename)
 
-        df.to_csv(f'/home/importbackups/FULL{filename}', index=False)
+        df.to_csv(f'/home/importbackups/FULL{filename}', encoding='cp1252', index=False)
 
 
         try:
@@ -552,7 +552,7 @@ with session as session:
         saveLastOrder(str(df.iloc[-1]['Order Date']))
 
         #write final output to csv
-        df.to_csv(fullfile, index=False)
+        df.to_csv(fullfile, encoding='cp1252', index=False)
 
 
 
