@@ -535,7 +535,7 @@ with session as session:
         #replace magento ship methods using above mapping
         df['Shipping Method'] = df['Shipping Method'].replace(shipMapping)
 
-
+        df['Freight Acc Num'] = 123456
         #set name and path of output file using datetime at runtime
         filename = 'WWAutoOrderImport' + ' ' + now + '.csv'
         filepath = '/home/ftp/WWtrackingImport/pdfs'
