@@ -74,10 +74,12 @@ def recallLastOrder():
 
 
 def saveLastOrder(string):
-    with open('lastorder', 'w') as f:
-        logger.info(f"saving last order datetime to file: {string}")
-        f.write(string)
-
+    try:
+        with open('lastorder', 'w') as f:
+            logger.info(f"saving last order datetime to file: {string}")
+            f.write(string)
+    except:
+        pass
 
 def get_zip_info(zip_code):
     base_url = "https://www.zipcodeapi.com/rest/FokPyKZbaIf0lAHFjfGe3X5NkiGNfuZey430khU3HldnvthYpUGfbbpz30xE3udl/info.json"
