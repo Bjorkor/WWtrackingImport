@@ -538,8 +538,8 @@ with session as session:
                     'Tax Rate': 0,
                     'Promotion Code': None,
                     'Discount': 0,
-                    'Shipping Method': None,
-                    'Payment Type': None,
+                    'Shipping Method': ship_method,
+                    'Payment Type': payment_type,
                     'Comments': None,
                     'Company': company,
                     'ShipAtt': att

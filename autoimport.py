@@ -494,6 +494,59 @@ with session as session:
                 #add the series created above to the blank dataframe created at the beginning of the script
                 df = pd.concat([df, order.to_frame().T])
 
+            # Calculate the total discount for the order
+            total_discount = sum(i['discount_invoiced'] for i in y['items'])
+            print(f'total discount is: {total_discount}')
+            if total_discount != 0:
+                # Create a dictionary for the discount line item
+                discount_dict = {
+                    'Order Number': this_order_number,
+                    'Order Date': this_order_date,
+                    'Customer Firstname': cfname,
+                    'Customer Lastname': clname,
+                    'Customer Number': None,
+                    'Address 1': baddone,
+                    'Address 2': baddtwo,
+                    'City': ccity,
+                    'State': cstate,
+                    'Zip': czip,
+                    'Province/Other': None,
+                    'Country': ccountry_code,
+                    'Home Phone': hphone,
+                    'Work Phone': None,
+                    'Work Ext': None,
+                    'Email': this_email,
+                    'Ship Name': f"{sfname} {slname}",
+                    'Ship Address 1': saddone,
+                    'Ship Address 2': saddtwo,
+                    'Ship City': scity,
+                    'Ship State': sstate,
+                    'Ship Zip': szip,
+                    'Ship Province/Other': None,
+                    'Ship Country': scountry_code,
+                    'Ship Phone': sphone,
+                    'Product ID': 'Y WW COUPON',
+                    'Quantity': 1,  # Assuming the discount is represented as a single line item
+                    'Unit Price': -total_discount,  # Negative value to represent the discount
+                    'Cut List': None,
+                    'Cut Charge': None,
+                    'Shipping Cost': 0,
+                    'Tax Rate': 0,
+                    'Promotion Code': None,
+                    'Discount': 0,
+                    'Shipping Method': ship_method,
+                    'Payment Type': payment_type,
+                    'Comments': None,
+                    'Company': company,
+                    'ShipAtt': att
+                }
+
+                # Convert the discount dictionary to a pandas Series
+                discount_order = pd.Series(discount_dict)
+
+                # Add the discount line item to the existing DataFrame
+                df = pd.concat([df, discount_order.to_frame().T])
+
         #merge orders dataframe with the unit of measure dataframe from pullLocal(), using part number as the key
         df = df.merge(right=pullLocal(), how='left', on='Product ID')
 
