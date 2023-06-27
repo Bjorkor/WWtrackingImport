@@ -499,7 +499,7 @@ with session as session:
 
         # Calculate the total discount for the order
         total_discount = sum(i['discount_invoiced'] for i in y['items'])
-
+        print(f'total discount is: {total_discount}')
         if total_discount != 0:
 
             # Create a dictionary for the discount line item
