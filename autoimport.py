@@ -560,6 +560,7 @@ with session as session:
 
     #if response is BAD, print why
     if response.status_code == 400:
+
         print(response.content)
 
     #if response is inconclusive, retry

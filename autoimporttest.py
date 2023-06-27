@@ -22,6 +22,8 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from email.mime.base import MIMEBase
 from email import encoders
+import logging
+from logging.handlers import RotatingFileHandler
 
 #set some variables
 thread_local = local()
@@ -30,22 +32,54 @@ headers = {'Authorization': f'Bearer {token}'}
 now = str(datetime.datetime.utcnow())
 
 
+# Create 'logs' directory if it does not exist
+if not os.path.exists('logs'):
+    os.makedirs('logs')
+
+# Create a custom logger
+logger = logging.getLogger(__name__)
+
+# Set overall level to debug, default is warning for root logger
+logger.setLevel(logging.DEBUG)
+
+# Create handlers
+c_handler = logging.StreamHandler()
+f_handler = RotatingFileHandler('logs/import.log', maxBytes=20000000, backupCount=5)
+
+# Set levels for handlers (optional)
+c_handler.setLevel(logging.WARNING)
+f_handler.setLevel(logging.DEBUG)
+
+# Create formatters and add it to handlers
+c_format = logging.Formatter('%(name)s - %(levelname)s - %(message)s')
+f_format = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+c_handler.setFormatter(c_format)
+f_handler.setFormatter(f_format)
+
+# Add handlers to the logger
+logger.addHandler(c_handler)
+logger.addHandler(f_handler)
+
+
 #functions
 
 def recallLastOrder():
     try:
         with open('lastorder', 'r') as f:
             content = f.read()
-
+            logger.info(f"reading last order datetime from file: {content}")
         return content
     except:
         return 0
 
 
 def saveLastOrder(string):
-    with open('lastorder', 'w') as f:
-        f.write(string)
-
+    try:
+        with open('lastorder', 'w') as f:
+            logger.info(f"saving last order datetime to file: {string}")
+            f.write(string)
+    except:
+        pass
 
 def get_zip_info(zip_code):
     base_url = "https://www.zipcodeapi.com/rest/FokPyKZbaIf0lAHFjfGe3X5NkiGNfuZey430khU3HldnvthYpUGfbbpz30xE3udl/info.json"
@@ -458,7 +492,64 @@ with session as session:
                 order = pd.Series(order_dict)
 
                 #add the series created above to the blank dataframe created at the beginning of the script
+
                 df = pd.concat([df, order.to_frame().T])
+
+            #for each item ends here
+
+        # Calculate the total discount for the order
+        total_discount = sum(i['discount_invoiced'] for i in y['items'])
+
+        if total_discount != 0:
+
+            # Create a dictionary for the discount line item
+            discount_dict = {
+                'Order Number': this_order_number,
+                'Order Date': this_order_date,
+                'Customer Firstname': cfname,
+                'Customer Lastname': clname,
+                'Customer Number': None,
+                'Address 1': baddone,
+                'Address 2': baddtwo,
+                'City': ccity,
+                'State': cstate,
+                'Zip': czip,
+                'Province/Other': None,
+                'Country': ccountry_code,
+                'Home Phone': hphone,
+                'Work Phone': None,
+                'Work Ext': None,
+                'Email': this_email,
+                'Ship Name': f"{sfname} {slname}",
+                'Ship Address 1': saddone,
+                'Ship Address 2': saddtwo,
+                'Ship City': scity,
+                'Ship State': sstate,
+                'Ship Zip': szip,
+                'Ship Province/Other': None,
+                'Ship Country': scountry_code,
+                'Ship Phone': sphone,
+                'Product ID': 'Y WW COUPON',
+                'Quantity': 1,  # Assuming the discount is represented as a single line item
+                'Unit Price': -total_discount,  # Negative value to represent the discount
+                'Cut List': None,
+                'Cut Charge': None,
+                'Shipping Cost': 0,
+                'Tax Rate': 0,
+                'Promotion Code': None,
+                'Discount': 0,
+                'Shipping Method': None,
+                'Payment Type': None,
+                'Comments': None,
+                'Company': company,
+                'ShipAtt': att
+            }
+
+            # Convert the discount dictionary to a pandas Series
+            discount_order = pd.Series(discount_dict)
+
+            # Add the discount line item to the existing DataFrame
+            df = pd.concat([df, discount_order.to_frame().T])
 
         #merge orders dataframe with the unit of measure dataframe from pullLocal(), using part number as the key
         df = df.merge(right=pullLocal(), how='left', on='Product ID')
@@ -509,23 +600,19 @@ with session as session:
         filepath = '/home/ftp/WWtrackingImport/pdfs'
         fullfile = os.path.join(filepath, filename)
 
-        df.to_csv(f'/home/importbackups/FULL{filename}', encoding='ISO-8859-1', index=False)
+        df.to_csv(f'/home/importbackups/FULL{filename}', encoding='cp1252', index=False)
 
-        #df['Order Number'] = df['Order Number'].astype(int)
-        try:
-            df = df[df['Order Date'] > recallLastOrder()]
-        except:
-            pass
 
-        saveLastOrder(str(df.iloc[-1]['Order Date']))
+
 
         #write final output to csv
-        df.to_csv(fullfile, encoding='ISO-8859-1', index=False)
+        df.to_csv(fullfile, encoding='cp1252', index=False)
 
 
 
     #if response is BAD, print why
     if response.status_code == 400:
+
         print(response.content)
 
     #if response is inconclusive, retry
