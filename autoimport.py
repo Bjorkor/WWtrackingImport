@@ -584,7 +584,8 @@ with session as session:
             'UPS 2nd Day Air®': 'U07',
             'Priority Overnight': 'F01',
             '2nd Day': 'F11',
-            'Standard Overnight': 'F06'
+            'Standard Overnight': 'F06',
+            'USPS Ground Advantage': 'M01'
         }
 
         #replace magento ship methods using above mapping
