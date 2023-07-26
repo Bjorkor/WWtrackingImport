@@ -574,9 +574,6 @@ with session as session:
             'UPS® Ground': 'U12',
             'Spee-Dee': 'SPD',
             'First-Class Mail Package Service': 'M01',
-            'UPS Next Day Air Saver®': 'U43',
-            'UPS Next Day Air®': 'U01',
-            'UPS 2nd Day Air®': 'U07',
             'UPS Next Day Air® Early': 'U60',
             'Truck': 'TRUCK',
             'UPS Next Day Air Saver®': 'U43',
@@ -585,7 +582,12 @@ with session as session:
             'Priority Overnight': 'F01',
             '2nd Day': 'F11',
             'Standard Overnight': 'F06',
-            'USPS Ground Advantage': 'M01'
+            'USPS Ground Advantage': 'M01',
+            'Priority Mail Medium Flat Rate Box': 'M31',
+            'Priority Mail Large Flat Rate Box': 'M40',
+            'Priority Mail Small Flat Rate Box': 'M43'
+
+
         }
 
         #replace magento ship methods using above mapping
