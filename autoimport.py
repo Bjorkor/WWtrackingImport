@@ -598,8 +598,8 @@ with session as session:
         filename = 'WWAutoOrderImport' + ' ' + now + '.csv'
         filepath = '/home/ftp/WWtrackingImport/pdfs'
         fullfile = os.path.join(filepath, filename)
-
-        df.to_csv(f'/home/importbackups/FULL{filename}', encoding='cp1252', index=False)
+        df = df.str.replace('℅', '')
+        df.to_csv(f'/home/importbackups/FULL{filename}', index=False)
 
 
         try:
@@ -610,7 +610,7 @@ with session as session:
         saveLastOrder(str(df.iloc[-1]['Order Date']))
 
         #write final output to csv
-        df = df.str.replace('℅', '')
+
         df.to_csv(fullfile, index=False)
 
 
