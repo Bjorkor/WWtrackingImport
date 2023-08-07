@@ -598,7 +598,7 @@ with session as session:
         filename = 'WWAutoOrderImport' + ' ' + now + '.csv'
         filepath = '/home/ftp/WWtrackingImport/pdfs'
         fullfile = os.path.join(filepath, filename)
-        df = df.str.replace('℅', '')
+        
         df.to_csv(f'/home/importbackups/FULL{filename}', encoding='utf-8', index=False)
 
 
