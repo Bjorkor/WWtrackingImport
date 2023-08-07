@@ -610,7 +610,7 @@ with session as session:
         saveLastOrder(str(df.iloc[-1]['Order Date']))
 
         #write final output to csv
-        df.to_csv(fullfile, encoding='cp1252', index=False)
+        df.to_csv(fullfile, index=False)
 
 
 
