@@ -490,6 +490,9 @@ with session as session:
 
                 #set the now populated dictionary to a pandas series
                 order = pd.Series(order_dict)
+                order = order.apply(lambda x: x[:30] if isinstance(x, str) else x)
+                order = order.str.strip()
+                order = order.str.replace(r'\s+', ' ')
 
                 #add the series created above to the blank dataframe created at the beginning of the script
 
