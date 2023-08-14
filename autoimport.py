@@ -64,8 +64,15 @@ logger.addHandler(f_handler)
 #functions
 
 def recallLastOrder():
+    file_path = '/home/ftp/WWtrackingImport/lastorder'
+
+    if not os.path.exists(file_path):
+        with open(file_path, 'w') as f:
+            f.write('')
+            logger.info(f"created new file: {file_path}")
+
     try:
-        with open('lastorder', 'r') as f:
+        with open(file_path, 'r') as f:
             content = f.read()
             logger.info(f"reading last order datetime from file: {content}")
         return content
@@ -74,8 +81,14 @@ def recallLastOrder():
 
 
 def saveLastOrder(string):
+    file_path = '/home/ftp/WWtrackingImport/lastorder'
+
+    if not os.path.exists(file_path):
+        with open(file_path, 'w') as f:
+            logger.info(f"created new file: {file_path}")
+
     try:
-        with open('lastorder', 'w') as f:
+        with open(file_path, 'w') as f:
             logger.info(f"saving last order datetime to file: {string}")
             f.write(string)
     except:
@@ -492,9 +505,9 @@ with session as session:
                 order = pd.Series(order_dict)
 
                 #handle fields too long and disallowed chars
-                order = order.apply(lambda x: x[:30] if isinstance(x, str) else x)
+                '''order = order.apply(lambda x: x[:30] if isinstance(x, str) else x)
                 order = order.str.strip()
-                order = order.str.replace(r'\s+', ' ').replace('"', '').replace("'", '').replace("`", '').replace(",", '')
+                order = order.str.replace(r'\s+', ' ').replace('"', '').replace("'", '').replace("`", '').replace(",", '')'''
 
                 #add the series created above to the blank dataframe created at the beginning of the script
                 df = pd.concat([df, order.to_frame().T])
