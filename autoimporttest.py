@@ -492,7 +492,7 @@ with session as session:
                 order = pd.Series(order_dict)
                 order = order.apply(lambda x: x[:30] if isinstance(x, str) else x)
                 order = order.str.strip()
-                order = order.str.replace(r'\s+', ' ')
+                order = order.str.replace(r'\s+', ' ').replace('"', '').replace("'", '').replace("`", '').replace(",", '')
 
                 #add the series created above to the blank dataframe created at the beginning of the script
 
