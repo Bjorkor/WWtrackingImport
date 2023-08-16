@@ -591,7 +591,7 @@ with session as session:
             'Priority Mail': 'M02',
             'UPS® Ground': 'U12',
             'Spee-Dee': 'SPD',
-            'First-Class Mail Package Service': 'M01',
+            'First-Class Mail Package Service': 'M05',
             'UPS Next Day Air® Early': 'U60',
             'Truck': 'TRUCK',
             'UPS Next Day Air Saver®': 'U43',
@@ -600,7 +600,7 @@ with session as session:
             'Priority Overnight': 'F01',
             '2nd Day': 'F11',
             'Standard Overnight': 'F06',
-            'USPS Ground Advantage': 'M01',
+            'USPS Ground Advantage': 'M05',
             'Priority Mail Medium Flat Rate Box': 'M31',
             'Priority Mail Large Flat Rate Box': 'M40',
             'Priority Mail Small Flat Rate Box': 'M43'
