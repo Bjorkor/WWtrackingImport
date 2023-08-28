@@ -506,8 +506,8 @@ with session as session:
 
                 #handle fields too long and disallowed chars
                 order = order.apply(lambda x: x[:30] if isinstance(x, str) else x)
-                """order = order.str.strip()"""
-                order = order.str.replace(r'\s+', ' ').replace('"', ' ').replace("'", ' ').replace("`", ' ')
+                """order = order.str.strip()
+                order = order.str.replace(r'\s+', ' ').replace('"', ' ').replace("'", ' ').replace("`", ' ')"""
 
                 #add the series created above to the blank dataframe created at the beginning of the script
                 df = pd.concat([df, order.to_frame().T])
