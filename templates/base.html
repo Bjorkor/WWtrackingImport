@@ -4,11 +4,85 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Woodworker's Import</title>
+	    <style>
+        .message {
+            padding: 10px;
+            margin: 5px;
+            background-color: #f3f3f3
+        }
+        nav a {
+            color: #d64161;
+            font-size: 3em;
+            margin-left: 50px;
+            text-decoration: none;
+        }
+
+        .alert {
+            padding: 20px;
+            margin: 5px;
+            color: #970020;
+            background-color: #ffd5de;
+        }
+
+        #loading {
+            width: 50%;
+            display: none;
+
+            cursor: wait;
+        }
+        #loadingimg {
+            margin-left: auto;
+            margin-right: auto;
+            width: 100%;
+        }
+        #foot {
+            margin-top: 100px;
+        }
+        .quotetable {
+        margin: 20px;
+        }
+
+        .quotetable table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .quotetable th, .quotetable td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .quotetable th {
+            background-color: #f2f2f2;
+        }
+
+        .quotetable h3 {
+            margin-top: 20px;
+        }
+
+        .quotetable hr {
+            margin-top: 20px;
+        }
+
+    </style>
+	<script type="text/javascript">
+	function loading(){
+		let loading = document.getElementById("loading");
+		let content = document.getElementById("content");
+		content.style.display = 'none';
+		loading.style.display = 'block';
+	}
+	</script>
 </head>
 <body>
-	
+<div id="loading">
+	<img src="loading.gif" alt="" id="loadingimg">
+</div>
+<div id=content>
 {% block content %}
 
 {% endblock %}
+</div>
 </body>
 </html>

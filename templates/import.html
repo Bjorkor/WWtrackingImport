@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+<h1>Woodworker's Import</h1>
+
+<form method="post">
+
+  <br>
+	<p>* NOTE * the files produced by this tool include ALL orders marked as 'Processing'</p>
+	<p>Please ensure you double check the last import to avoid duplicate orders</p>
+
+	
+  <button type="submit" onclick="loading();">Generate New File</button>
+</form>
+
+<br>
+
+<h1>Files</h1>
+<ul>
+	{% for file in files %}
+		<li><a href="{{ url_for('download_file', filename=file) }}">{{ file }}</a></li>
+	{% endfor %}
+</ul>
+
+{% endblock %}

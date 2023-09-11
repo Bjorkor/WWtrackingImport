@@ -13,12 +13,13 @@ import datetime
 from dotenv import load_dotenv
 import json
 import os
+from dotenv import load_dotenv
 
 
 thread_local = local()
 token = os.getenv('BEARER')
 headers = {'Authorization': f'Bearer {token}'}
-now = str(datetime.datetime.utcnow())
+
 
 def get_zip_info(zip_code):
     base_url = "https://www.zipcodeapi.com/rest/FokPyKZbaIf0lAHFjfGe3X5NkiGNfuZey430khU3HldnvthYpUGfbbpz30xE3udl/info.json"
@@ -120,10 +121,7 @@ def pullLocal():
             return df
 
 def main_work():
-    # load variables from .env file
-    load_dotenv()
-
-
+	now = str(datetime.datetime.utcnow())
     # Define final column titles
     header2 = ["Order Number", "Order Date", "Customer Firstname", "Customer Lastname", "Customer Number", "Address 1",
                "Address 2", "City", "State", "Zip", "Province/Other", "Country", "Home Phone", "Work Phone", "Work Ext",
@@ -534,6 +532,7 @@ def main_work():
             # set name and path of output file using datetime at runtime
             filename = 'WWAutoOrderImport' + ' ' + now + '.csv'
             filepath = '/home/ftp/WWtrackingImport/manual/csv'
+			
             fullfile = os.path.join(filepath, filename)
 
             df.to_csv(f'/home/importbackups/MANUAL_FULL{filename}', encoding='utf-8', index=False)
