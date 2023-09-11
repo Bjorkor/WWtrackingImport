@@ -4,7 +4,7 @@ import flask_import_module
 import re
 
 
-app = Flask(__name__)
+import_server = Flask(__name__)
 
 
 
@@ -17,7 +17,7 @@ def extract_timestamp(filename):
 
 
 
-@app.route('/', methods=('GET', 'POST'))
+@import_server.route('/', methods=('GET', 'POST'))
 def import_page():
 	if request.method == 'POST':
 
@@ -30,11 +30,10 @@ def import_page():
 	
 	return render_template('import.html', files=files)
 
-@app.route('/download/<filename>')
+@import_server.route('/download/<filename>')
 def download_file(filename):
 	folder_path = '/home/ftp/WWtrackingImport/manual/csv'
 	return send_from_directory(folder_path, filename, as_attachment=True)
 
 
-if __name__ == '__main__':
-	app.run(debug=True, use_reloader=True, port=3002)
+
