@@ -554,7 +554,7 @@ def main_work():
             while response.status_code != 200 and response.status_code != 400:
                 counter += 1
                 if counter > 4:
-                    flash('Please Try Again Later')
+                    print('break')
                     break
                 print('retrying...')
                 time.sleep(10)
