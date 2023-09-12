@@ -15,7 +15,7 @@ import json
 import os
 from dotenv import load_dotenv
 import re
-
+load_dotenv()
 thread_local = local()
 token = os.getenv('BEARER')
 headers = {'Authorization': f'Bearer {token}'}
