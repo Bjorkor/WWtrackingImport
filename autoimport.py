@@ -625,9 +625,10 @@ with session as session:
             df = df[df['Order Date'] > recallLastOrder()]
         except:
             pass
-
-        saveLastOrder(str(df.iloc[-1]['Order Date']))
-
+        try:
+            saveLastOrder(str(df.iloc[-1]['Order Date']))
+        except:
+            pass
         #write final output to csv
 
         df.to_csv(fullfile, encoding='utf-8', index=False)
