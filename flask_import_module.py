@@ -16,7 +16,6 @@ import os
 from dotenv import load_dotenv
 import re
 
-
 thread_local = local()
 token = os.getenv('BEARER')
 headers = {'Authorization': f'Bearer {token}'}
@@ -33,8 +32,9 @@ def get_zip_info(zip_code):
     else:
         return None
 
+
 def alpha2_to_alpha3(alpha2_code):
-    #convert 2 char country codes to 3 char country codes
+    # convert 2 char country codes to 3 char country codes
     country_codes = {
         'AD': 'AND', 'AE': 'ARE', 'AF': 'AFG', 'AG': 'ATG', 'AI': 'AIA', 'AL': 'ALB', 'AM': 'ARM',
         'AO': 'AGO', 'AQ': 'ATA', 'AR': 'ARG', 'AS': 'ASM', 'AT': 'AUT', 'AU': 'AUS', 'AW': 'ABW',
@@ -69,9 +69,9 @@ def alpha2_to_alpha3(alpha2_code):
         'SX': 'SXM', 'SY': 'SYR', 'SZ': 'SWZ', 'TC': 'TCA', 'TD': 'TCD', 'TF': 'ATF', 'TG': 'TGO',
         'TH': 'THA', 'TJ': 'TJK', 'TK': 'TKL', 'TL': 'TLS', 'TM': 'TKM', 'TN': 'TUN', 'TO': 'TON',
         'TR': 'TUR', 'TT': 'TTO', 'TV': 'TUV', 'TW': 'TWN', 'TZ': 'TZA', 'UA': 'UKR', 'UG': 'UGA',
-        'UM': 'UMI','US': 'USA', 'UY': 'URY', 'UZ': 'UZB', 'VA': 'VAT', 'VC': 'VCT', 'VE': 'VEN',
+        'UM': 'UMI', 'US': 'USA', 'UY': 'URY', 'UZ': 'UZB', 'VA': 'VAT', 'VC': 'VCT', 'VE': 'VEN',
         'VG': 'VGB', 'VI': 'VIR', 'VN': 'VNM', 'VU': 'VUT', 'WF': 'WLF', 'WS': 'WSM', 'YE': 'YEM',
-        'YT': 'MYT','ZA': 'ZAF', 'ZM': 'ZMB', 'ZW': 'ZWE'}
+        'YT': 'MYT', 'ZA': 'ZAF', 'ZM': 'ZMB', 'ZW': 'ZWE'}
 
     alpha3_code = country_codes.get(alpha2_code.upper(), None)
 
@@ -81,15 +81,15 @@ def alpha2_to_alpha3(alpha2_code):
     return alpha3_code
 
 
-
 def get_session() -> Session:
-    #use the current web session
+    # use the current web session
     if not hasattr(thread_local, 'session'):
         thread_local.session = requests.Session()
     return thread_local.session
 
+
 def pullLocal():
-    #query local database, returns pandas dataframe with SKU and Unit of Measure
+    # query local database, returns pandas dataframe with SKU and Unit of Measure
     server = "WIN-PBL82ADEL98.HDLUSA.LAN,49816,49816"
     database = "HDL"
     driver_name = ''
@@ -121,8 +121,9 @@ def pullLocal():
             df.rename(columns={"MASTER_STOCKNO": "Product ID", "MASTER_REC_UT": "Unit"}, inplace=True)
             return df
 
+
 def main_work():
-	now = str(datetime.datetime.utcnow())
+    now = str(datetime.datetime.utcnow())
     # Define final column titles
     header2 = ["Order Number", "Order Date", "Customer Firstname", "Customer Lastname", "Customer Number", "Address 1",
                "Address 2", "City", "State", "Zip", "Province/Other", "Country", "Home Phone", "Work Phone", "Work Ext",
@@ -170,8 +171,8 @@ def main_work():
 
                 # what?
                 """entd = {'entity': entity_id, 'order number': this_order_number}
-                ents = pd.Series(entd)
-                entdf = pd.concat([entdf, ents.to_frame().T])"""
+				ents = pd.Series(entd)
+				entdf = pd.concat([entdf, ents.to_frame().T])"""
 
                 # magento's reported order date
                 this_order_date = y['created_at']
@@ -533,11 +534,10 @@ def main_work():
             # set name and path of output file using datetime at runtime
             filename = 'WWAutoOrderImport' + ' ' + now + '.csv'
             filepath = '/home/ftp/WWtrackingImport/manual/csv'
-			
+
             fullfile = os.path.join(filepath, filename)
 
             df.to_csv(f'/home/importbackups/MANUAL_FULL{filename}', encoding='utf-8', index=False)
-
 
             # write final output to csv
 
