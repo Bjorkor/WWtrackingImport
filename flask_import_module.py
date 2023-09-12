@@ -142,7 +142,7 @@ def main_work():
 
     # get the current web session and set it to session variable
     session = get_session()
-
+    counter = 0
     # open connection using session
     with session as session:
 
@@ -549,8 +549,13 @@ def main_work():
 
         # if response is inconclusive, retry
         if response.status_code != 200 and response.status_code != 400:
+
             # print('FFFFFF')
             while response.status_code != 200 and response.status_code != 400:
+                counter += 1
+                if counter > 4:
+                    flash('Please Try Again Later')
+                    break
                 print('retrying...')
                 time.sleep(10)
                 response = session.get(api_url_proc, headers=headers)
