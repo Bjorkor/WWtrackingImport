@@ -604,7 +604,8 @@ with session as session:
             'USPS Ground Advantage': 'M05',
             'Priority Mail Medium Flat Rate Box': 'M31',
             'Priority Mail Large Flat Rate Box': 'M40',
-            'Priority Mail Small Flat Rate Box': 'M43'
+            'Priority Mail Small Flat Rate Box': 'M43',
+            'Domestic Ground': 'U13'
 
 
         }
