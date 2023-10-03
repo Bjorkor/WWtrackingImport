@@ -525,7 +525,8 @@ def main_work():
                 'Priority Mail Medium Flat Rate Box': 'M31',
                 'Priority Mail Large Flat Rate Box': 'M40',
                 'Priority Mail Small Flat Rate Box': 'M43',
-                'Domestic Ground': 'U13'
+                'Domestic Ground': 'U13',
+                'UPS Express': 'U30'
 
             }
 
