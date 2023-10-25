@@ -534,6 +534,12 @@ def main_work():
             # replace magento ship methods using above mapping
             df['Shipping Method'] = df['Shipping Method'].replace(shipMapping)
 
+            # Filter the DataFrame for rows where 'Shipping Method' contains 'UPS SurePost'
+            filtered_rows = df['Shipping Method'].str.contains('UPS SurePost', case=False)
+
+            # Replace the matching values with a new string
+            df.loc[filtered_rows, 'Shipping Method'] = 'SUP'
+
             # set name and path of output file using datetime at runtime
             filename = 'WWAutoOrderImport' + ' ' + now + '.csv'
             filepath = '/home/ftp/WWtrackingImport/manual/csv'
