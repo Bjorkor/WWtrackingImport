@@ -606,7 +606,8 @@ with session as session:
             'Priority Mail Large Flat Rate Box': 'M40',
             'Priority Mail Small Flat Rate Box': 'M43',
             'Domestic Ground': 'U13',
-            'UPS Express': 'U30'
+            'UPS Express': 'U30',
+            'UPS SurePost¬Æ': 'SUP'
 
 
         }
