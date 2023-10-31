@@ -527,7 +527,8 @@ def main_work():
                 'Priority Mail Small Flat Rate Box': 'M43',
                 'Domestic Ground': 'U13',
                 'UPS Express': 'U30',
-                'UPS SurePost¬Æ': 'SUP'
+                'UPS SurePost¬Æ': 'SUP',
+                'Home Delivery': 'R02R'
 
             }
 
